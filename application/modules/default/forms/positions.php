@@ -35,18 +35,18 @@ class Default_Form_positions extends Zend_Form
         $positionname->setAttrib('maxLength', 50);
         $positionname->setRequired(true);
         $positionname->addValidator('NotEmpty', false, array('messages' => 'Please enter position.')); 
-		$positionname->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 'pattern' =>'/^[a-zA-Z][a-zA-Z0-9\-\s]*$/i',
-							 'messages' => array(
-							 'regexNotMatch'=>'Please enter valid position.'
-								 )
-							 )
-						 )
-					 )); 
+//		$positionname->addValidators(array(
+//						 array(
+//							 'validator'   => 'Regex',
+//							 'breakChainOnFailure' => true,
+//							 'options'     => array(
+//							 'pattern' =>'/^[a-zA-Z][a-zA-Z0-9\-\s]*$/i',
+//							 'messages' => array(
+//							 'regexNotMatch'=>'Please enter valid position.'
+//								 )
+//							 )
+//						 )
+//					 ));
 		$positionname->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_positions',
                                                         'field'=>'positionname',

@@ -463,13 +463,14 @@ class sapp_Helper
         // Get worksheet dimensions
         $sizeOfWorksheet = $sheet->getHighestDataRow();
         $highestColumn 	 = $sheet->getHighestDataColumn();
+
         if($sizeOfWorksheet > 1)
         {    		
             $column_salary_currency = 18;$column_salary_type = 19;$column_salary = 20;
             $arrReqHeaders = array(
                 'Prefix','First name','Last name','Employee Id','Role Type','Email','Business Unit','Department','Reporting manager','Job Title' ,
-                'Position','Employment Status','Date of joining','Date of leaving','Experience','Extension',
-                'Work telephone number','Fax',$column_salary_currency => 'Salary Currency',
+                'Position','Employment Status','Date of joining','Date of leaving','Experience','Father name',
+                'Work mobile number','Personal mobile number',$column_salary_currency => 'Salary Currency',
                 $column_salary_type =>'Pay Frequency',$column_salary => 'Salary'
             );
 		                        
@@ -589,7 +590,7 @@ class sapp_Helper
                         $err_msg = "Date of leaving cannot be empty at row ".$i.".";
                         break;
                     }
-                    if(!in_array($rowData[11], $dol_emp_stat_arr) && !empty($rowData[13]) && in_array($emp_stat_arr[strtolower($rowData[11])],$emp_stat_arr))
+                    if(!in_array(strtolower($rowData[11]), $dol_emp_stat_arr) && !empty($rowData[13]) && in_array($emp_stat_arr[strtolower($rowData[11])],$emp_stat_arr))
                     {
                         $err_msg = "Date of leaving must be empty for '".$rowData[11]."' at row ".$i.".";
                         break;
@@ -647,11 +648,11 @@ class sapp_Helper
                         $err_msg = "Job title is not a valid format at row ".$i.".";
                         break;
                     }
-                    if(!preg_match("/^[a-zA-Z][a-zA-Z0-9\-\s]*$/i", $rowData[10])  && !empty($rowData[10]))
-                    {
-                        $err_msg = "Position is not a valid format at row ".$i.".";
-                        break;
-                    }
+//                    if(!preg_match("/^[a-zA-Z][a-zA-Z0-9\-\s]*$/i", $rowData[10])  && !empty($rowData[10]))
+//                    {
+//                        $err_msg = "Position is not a valid format at row ".$i.".";
+//                        break;
+//                    }
                     if(!preg_match("/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/", $rowData[11])  && !empty($rowData[11]))
                     {
                         $err_msg = "Employment status is not a valid format at row ".$i.".";
@@ -662,35 +663,66 @@ class sapp_Helper
                     {
                         try
                         {
-                        	$var = $rowData[12];
-                        	$date = str_replace('/', '-', $var);
-                        	$test_doj = date('Y-m-d', strtotime($date));
-							//date format 2012-09-12(y-m-d)
-							if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$var))
-							{
-									return array('status' => 'error' , 'msg' => "Date of joining is not a valid format at row ".$i.".");
-							}
-                        } 
+//                        	$var = $rowData[12];
+//                        	$date = str_replace('/', '-', $var);
+//                        	$test_doj = date('Y-m-d', strtotime($date));
+//							//date format 2012-09-12(y-m-d)
+//							if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$var))
+//							{
+//									return array('status' => 'error' , 'msg' => "Date of joining is not a valid format at row ".$i.".");
+//							}
+
+                            $var = $rowData[12];
+                            $join_arr = explode('.',$var);
+                            $join_date = $join_arr[2].'-'.$join_arr[1].'-'.$join_arr[0];
+                            $test_doj = date('Y-m-d', strtotime($join_date));
+
+//                            date format 12.09.2012 (d-m-y)
+                            if (!preg_match("/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/",$var))
+                            {
+                                return array('status' => 'error' , 'msg' => "Date of joining is not a valid format at row ".$i.".");
+                            }
+                        }
                         catch (Exception $ex) {
-                        	
+
                            return array('status' => 'error' , 'msg' => "Date of joining is not a valid format at row ".$i.".");
-                        }                    
+                        }
                     }
-                    
+
                     if(!empty($rowData[13]))
                     {
                         try
                         {
-                        	$var = $rowData[13];
-                        	$date = str_replace('/', '-', $var);
-                        	$test_dol= date('Y-m-d', strtotime($date));
+//                        	$var = $rowData[13];
+//                        	$date = str_replace('/', '-', $var);
+//                        	$test_dol= date('Y-m-d', strtotime($date));
+
+                            $var = $rowData[13];
+                            $leave_arr = explode('.',$var);
+                            $leave_date = $leave_arr[2].'-'.$leave_arr[1].'-'.$leave_arr[0];
+
+                            $test_dol= date('Y-m-d', strtotime($leave_date));
+
+                            //date format 12.09.2012 (d-m-y)
+                            if (!preg_match("/^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/",$var))
+                            {
+                                return array('status' => 'error' , 'msg' => "Date of leaving is not a valid format at row ".$i.".");
+                            }
+
                         } catch (Exception $ex) {
                             return array('status' => 'error' , 'msg' => "Date of leaving is not a valid format at row ".$i.".");
-                        }                    
+                        }
                     }
-                    if(!empty($rowData[13]) && $rowData[13] < $rowData[12])
+
+                    if(!empty($rowData[13]))
                     {
-                        $err_msg = "Date of leaving must be greater than date of joining at row ".$i.".";
+                        $join_arr = explode('.',$rowData[12]);
+                        $leave_arr = explode('.',$rowData[13]);
+                        $join_date = $join_arr[2].'-'.$join_arr[1].'-'.$join_arr[0];
+                        $leave_date = $leave_arr[2].'-'.$leave_arr[1].'-'.$leave_arr[0];
+                        if($join_date>$leave_date){
+                            $err_msg = "Date of leaving must be greater than date of joining at row ".$i.".";
+                        }
                         break;
                     }
                     if(!preg_match("/^[0-9]\d{0,1}(\.\d*)?$/", $rowData[14])  && !empty($rowData[14]))
@@ -698,9 +730,9 @@ class sapp_Helper
                         $err_msg = "Experience is not a valid format at row ".$i.".";
                         break;
                     }
-                    if(!preg_match("/^[0-9]+$/", $rowData[15])  && !empty($rowData[15]))
+                    if(!preg_match("/^[a-zA-Z][a-zA-Z0-9\s]*$/", $rowData[15])  && !empty($rowData[15]))
                     {
-                        $err_msg = "Extension is not a valid format at row ".$i.".";
+                        $err_msg = "Father name is not a valid format at row ".$i.".";
                         break;
                     }
                     if(!preg_match("/^(?!0{10})[0-9\+\-\)\(]+$/", $rowData[16])  && !empty($rowData[16]))
@@ -862,11 +894,13 @@ class sapp_Helper
                     }
                     
                 }//end of for loop
-                
+
+
                 if(!empty($err_msg))
                     return array('status' => 'error' , 'msg' => $err_msg);
+
                 $err_msg = "";
-                
+
                 
                 for($i=2; $i <= $sizeOfWorksheet; $i++ )
                 {
@@ -889,7 +923,8 @@ class sapp_Helper
                     $ex_fax_arr[] = $rowData[17];
                     $tot_rec_cnt++;
                 }
-                
+
+
                 foreach($ex_email_arr as $key1 => $value1)
                 {
                     $d = 0;
@@ -908,7 +943,7 @@ class sapp_Helper
                  
                 if(!empty($err_msg))
                     return array('status' => 'error' , 'msg' => $err_msg);
-				
+
                 //end of validations
                 
                 //start of saving
@@ -927,15 +962,21 @@ class sapp_Helper
                         $employeeId_final = trim($emp_identity_code).trim($rowData[3]);
                         $emppassword = sapp_Global::generatePassword();
 
-                        $date_join = str_replace('/', '-', $rowData[12]);
-                        $date_of_joining = date('Y-m-d', strtotime($date_join));
+
+                        $join_date_arr = explode('.',$rowData[12]);
+                        $join_date = $join_date_arr[2].'-'.$join_date_arr[1].'-'.$join_date_arr[0];
+
+                        $date_of_joining = date('Y-m-d', strtotime($join_date));
+
 
                         $date_of_leaving = "";
                         if($rowData[13] != '')
                         {
-                            $date_leave = str_replace('/', '-', $rowData[13]);
-                            $date_of_leaving= date('Y-m-d', strtotime($date_leave));
+                            $leave_date_arr = explode('.',$rowData[13]);
+                            $leave_date = $leave_date_arr[2].'-'.$leave_date_arr[1].'-'.$leave_date_arr[0];
+                            $date_of_leaving= date('Y-m-d', strtotime($leave_date));
                         }
+
                         //start of saving into user table
                         $userfullname = $rowData[1].' '.$rowData[2];
                         $user_data = array(
@@ -969,9 +1010,9 @@ class sapp_Helper
                             'jobtitle_id'=>isset($job_arr[strtolower($rowData[9])])?$job_arr[strtolower($rowData[9])]:null, 
                             'position_id'=>isset($positions_arr[strtolower($rowData[10])])?$positions_arr[strtolower($rowData[10])]:null, 
                             'prefix_id'=> isset($prefix_arr[strtolower($rowData[0])])?$prefix_arr[strtolower($rowData[0])]:null,
-                            'extension_number'=>($rowData[15]!=''?$rowData[15]:NULL),
-                            'office_number'=>($rowData[16]!=''?$rowData[16]:NULL),
-                            'office_faxnumber'=>($rowData[17]!=''?$rowData[17]:NULL),
+                            'father_name'=>($rowData[15]!=''?$rowData[15]:NULL),
+                            'work_mobilenumber'=>($rowData[16]!=''?$rowData[16]:NULL),
+                            'personal_mobilenumber'=>($rowData[17]!=''?$rowData[17]:NULL),
                             'date_of_joining'=>$date_of_joining,
                             'date_of_leaving'=>($date_of_leaving!=''?$date_of_leaving:NULL),
                             'years_exp'=>($rowData[14]=='')?null:$rowData[14],

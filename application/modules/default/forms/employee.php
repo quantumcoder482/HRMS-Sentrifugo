@@ -142,23 +142,23 @@ class Default_Form_employee extends Zend_Form
 										)));
 		$prefix_id->getValidator('Db_RecordExists')->setMessage('Selected prefix is deleted.');	        
 				
-		$extension_number = new Zend_Form_Element_Text('extension_number');
-		$extension_number->setAttrib('maxLength', 4);
-		$extension_number->setLabel("Extension");
-		$extension_number->addFilter(new Zend_Filter_StringTrim());
-		$extension_number->addValidator("regex",true,array(                          
-                           'pattern'=>'/^[0-9]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter only numbers.'
-                           )
-        	));
+		$father_name = new Zend_Form_Element_Text('father_name');
+		$father_name->setAttrib('maxLength', 4);
+		$father_name->setLabel("Father Name");
+		$father_name->addFilter(new Zend_Filter_StringTrim());
+//		$father_name->addValidator("regex",true,array(
+//                           'pattern'=>'/^[0-9]+$/',
+//                           'messages'=>array(
+//                               'regexNotMatch'=>'Please enter only numbers.'
+//                           )
+//        	));
 	
-	    $office_number = new Zend_Form_Element_Text('office_number');
-        $office_number->setAttrib('maxLength', 10);
+	    $work_mobilenumber = new Zend_Form_Element_Text('work_mobilenumber');
+        $work_mobilenumber->setAttrib('maxLength', 10);
 		
-		$office_number->setLabel("Work Telephone Number");
-        $office_number->addFilter(new Zend_Filter_StringTrim());
-		$office_number->addValidator("regex",true,array(
+		$work_mobilenumber->setLabel("Work Mobile Number");
+        $work_mobilenumber->addFilter(new Zend_Filter_StringTrim());
+		$work_mobilenumber->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9\+\-\)\(]+$/', 
                           
                            'messages'=>array(
@@ -166,11 +166,11 @@ class Default_Form_employee extends Zend_Form
                            )
         	));
 
-        $office_faxnumber = new Zend_Form_Element_Text('office_faxnumber');
-        $office_faxnumber->setAttrib('maxLength', 15);
-		$office_faxnumber->setLabel("Fax");
-        $office_faxnumber->addFilter(new Zend_Filter_StringTrim());
-		$office_faxnumber->addValidator("regex",true,array(
+        $personal_mobilenumber = new Zend_Form_Element_Text('personal_mobilenumber');
+        $personal_mobilenumber->setAttrib('maxLength', 15);
+		$personal_mobilenumber->setLabel("Personal Mobile Number");
+        $personal_mobilenumber->addFilter(new Zend_Filter_StringTrim());
+		$personal_mobilenumber->addValidator("regex",true,array(
                            'pattern'=>'/^[0-9\+\-\)\(]+$/',                          
                            'messages'=>array(
 							  'regexNotMatch'=>'Please enter valid fax number.'
@@ -424,7 +424,7 @@ class Default_Form_employee extends Zend_Form
                 
                 
 		$this->addElements(array($id,$userid,$reportingmanager,$empstatus,$businessunit,$department,$jobtitle,
-                                         $position,$prefix_id,$extension_number,$office_number,$office_faxnumber,$yearsofexp,$date_of_joining,$date_of_leaving,$submit,$employeeId,
+                                         $position,$prefix_id,$father_name,$work_mobilenumber,$personal_mobilenumber,$yearsofexp,$date_of_joining,$date_of_leaving,$submit,$employeeId,
                                          $modeofentry,$candidatereferredby,$rccandidatename,$emailaddress,
                                          $emprole,$hid_modeofentry,$hid_rccandidatename,$other_modeofentry,$act_inact,
                                          $disp_requi,$first_name,$last_name,$employeeNumId,$final_emp_id));

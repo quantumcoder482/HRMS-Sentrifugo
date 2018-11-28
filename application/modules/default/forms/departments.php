@@ -36,12 +36,12 @@ class Default_Form_departments extends Zend_Form
         $deptname->addFilter(new Zend_Filter_StringTrim());
         $deptname->setRequired(true);
         $deptname->addValidator('NotEmpty', false, array('messages' => 'Please enter department name.'));  
-		$deptname->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(?![0-9]{4})[a-zA-Z0-9.\- ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid department name.'
-                           )
-        	));
+//		$deptname->addValidator("regex",true,array(
+//                           'pattern'=>'/^(?![0-9]{4})[a-zA-Z0-9.\- ?]+$/',
+//                           'messages'=>array(
+//                               'regexNotMatch'=>'Please enter valid department name.'
+//                           )
+//        	));
 			
 		$deptcode = new Zend_Form_Element_Text('deptcode');
         $deptcode->addFilter(new Zend_Filter_StringTrim());

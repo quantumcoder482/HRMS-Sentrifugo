@@ -1760,9 +1760,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 		$position_id = $this->_request->getParam('position_id',null);
 		$user_id = $this->_getParam('user_id',null);
 		$prefix_id = $this->_getParam('prefix_id',null);
-		$extension_number = $this->_getParam('extension_number',null);
-		$office_number = $this->_request->getParam('office_number',null);
-		$office_faxnumber = $this->_request->getParam('office_faxnumber',null);
+		$father_name = $this->_getParam('father_name',null);
+		$work_mobilenumber = $this->_request->getParam('work_mobilenumber',null);
+		$personal_mobilenumber = $this->_request->getParam('personal_mobilenumber',null);
 		$date_of_joining = $this->_request->getParam('date_of_joining',null);
 		$date_of_joining = sapp_Global::change_date($date_of_joining,'database');
 		
@@ -1898,9 +1898,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
                                     'jobtitle_id'=>$jobtitle_id, 
                                     'position_id'=>$position_id, 
                                     'prefix_id'=>$prefix_id,
-                                    'extension_number'=>($extension_number!=''?$extension_number:NULL),
-                                    'office_number'=>($office_number!=''?$office_number:NULL),
-                                    'office_faxnumber'=>($office_faxnumber!=''?$office_faxnumber:NULL),
+                                    'father_name'=>($father_name!=''?$father_name:NULL),
+                                    'work_mobilenumber'=>($work_mobilenumber!=''?$work_mobilenumber:NULL),
+                                    'personal_mobilenumber'=>($personal_mobilenumber!=''?$personal_mobilenumber:NULL),
                                     'date_of_joining'=>$date_of_joining,
                                     'date_of_leaving'=>($date_of_leaving!=''?$date_of_leaving:NULL),
                                     'years_exp'=>($years_exp=='')?null:$years_exp,
@@ -4068,8 +4068,8 @@ class Default_MyemployeesController extends Zend_Controller_Action
                         'date_of_leaving' => 'Date of Leaving',
                         'years_exp' => 'Years of Experience',
                         'holiday_group_name' => 'Holiday Group',
-                        'office_number' => 'Work Phone',
-                        'extension_number' => 'Extension Number',
+                        'work_mobilenumber' => 'Work Phone',
+                        'father_name' => 'Father Name',
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode of Entry(Other)',
 						'freqtype' => 'Pay Frequency',//04-02-2015

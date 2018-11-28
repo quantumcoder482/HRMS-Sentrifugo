@@ -208,7 +208,7 @@ $(document).ready(function() {
 		});
 
         $( "#main_parent_"+<?php echo PAYROLL ; ?> ).click(function() {
-            var appmethod = 'shiftpayroll';
+            var appmethod = 'monthlypayroll';
             $('.wrapperdivright').html('');
             $.blockUI({ width:'50px',message: $("#spinner").html() });
             window.location.href = base_url+'/'+appmethod+'/';

@@ -36,12 +36,12 @@ class Default_Form_jobtitles extends Zend_Form
         $jobtitlecode->setAttrib('maxLength', 20);
         $jobtitlecode->setRequired(true);
         $jobtitlecode->addValidator('NotEmpty', false, array('messages' => 'Please enter job title code.'));
-		$jobtitlecode->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid job title code.'
-                           )
-        	));
+//		$jobtitlecode->addValidator("regex",true,array(
+//                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/',
+//                           'messages'=>array(
+//                               'regexNotMatch'=>'Please enter valid job title code.'
+//                           )
+//        	));
         $jobtitlecode->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_jobtitles',
                                                         'field'=>'jobtitlecode',
@@ -54,12 +54,12 @@ class Default_Form_jobtitles extends Zend_Form
         $jobtitlename->setAttrib('maxLength', 50);
         $jobtitlename->setRequired(true);
         $jobtitlename->addValidator('NotEmpty', false, array('messages' => 'Please enter job title.'));  
-		$jobtitlename->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\&\s]*$/', 
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid job title.'
-                           )
-        	));
+//		$jobtitlename->addValidator("regex",true,array(
+//                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\&\s]*$/',
+//                           'messages'=>array(
+//                               'regexNotMatch'=>'Please enter valid job title.'
+//                           )
+//        	));
 	
 		$jobdescription = new Zend_Form_Element_Textarea('jobdescription');
         $jobdescription->setAttrib('rows', 10);

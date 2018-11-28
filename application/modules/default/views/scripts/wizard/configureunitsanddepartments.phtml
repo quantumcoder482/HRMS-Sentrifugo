@@ -45,7 +45,7 @@ function addDepartmentDiv()
 		html+="<div id='parent_"+idcount+"' class='add_request'>";
 		html+="<div class='form-ui'>";
 		html+="<label class='required'>Department</label>";
-		html+="<input type='text' maxlength='100' value='' id='department_"+idcount+"' name='department[]' class='cls_service_request_name' onblur='validateTextInput(this,\"department\")' onkeyup='validateTextInput(this,\"department\")'>";
+		html+="<input type='text' maxlength='100' value='' id='department_"+idcount+"' name='department[]' class='cls_service_request_name'>";
 		html+="</div>";
 		html+="<div class='form-ui form-ui-textarea'>";
 		html+="<label class='required'>Street Address</label>";
@@ -229,7 +229,7 @@ function saveBusinessUnit()
 				<div id='parent_0' class="add_request" style="margin:0;" >
 					<div class="form-ui ">
 		            <label class="required">Department </label>
-							<input type="text" maxlength="100" value="" id="department_0" name="department[]" class='cls_service_request_name' onblur='validateTextInput(this,"department name")' onkeyup='validateTextInput(this,"department name")'>                            
+							<input type="text" maxlength="100" value="" id="department_0" name="department[]" class='cls_service_request_name' > <!-- onblur='validateTextInput(this,"department name")' onkeyup='validateTextInput(this,"department name")' -->
 		        	</div>
 		        	
 		        	<div class="form-ui form-ui-textarea">
@@ -312,7 +312,7 @@ $(document).ready(function(){
 					html+="<div id='parent_<?php echo $i;?>' class='add_request' >";
 					html+="<div class='form-ui'>";
 					html+="<label class='required'>Department </label>";
-					html+="<input type='text' maxlength='100' value='<?php echo $_POST['department'][$i]?>' id='department_<?php echo $i;?>' name='department[]' class='cls_service_request_name' onblur='validateTextInput(this,\"department\")' onkeyup='validateTextInput(this,\"department\")'>";
+					html+="<input type='text' maxlength='100' value='<?php echo $_POST['department'][$i]?>' id='department_<?php echo $i;?>' name='department[]' class='cls_service_request_name'>";
 					<?php if(isset($this->msgarray['dept_name'][$i])){?>
 					html+="<span id='errors-department_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['dept_name'][$i];?></span>";
 					<?php }?>

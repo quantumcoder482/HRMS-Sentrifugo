@@ -99,7 +99,7 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 				else if($key == "jobtitle_name")
 					$searchQuery .= " e.jobtitle_name like '%".$val."%' AND ";					
 				else if($key == 'extn')					
-					$searchQuery .= " concat(e.office_number,' (ext ',e.extension_number,')') like '%".$val."%' AND ";
+					$searchQuery .= " concat(e.work_mobilenumber,' (ext ',e.father_name,')') like '%".$val."%' AND ";
 				else if($key == 'astatus')
               		$searchQuery .= " e.isactive like '%".$val."%' AND ";
 				else 

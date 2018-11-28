@@ -4942,7 +4942,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 		$position_id = $this->_request->getParam('position_id',null);
 		$user_id = $this->_getParam('user_id',null);
 		$prefix_id = $this->_getParam('prefix_id',null);
-		$extension_number = $this->_getParam('extension_number',null); 			
+		$father_name = $this->_getParam('father_name',null);
 		if($employeeform->isValid($this->_request->getPost()))
 		{                				
 			$id = $this->_request->getParam('id'); 
@@ -5055,7 +5055,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								'jobtitle_id'=>$jobtitle_id, 
 								'position_id'=>$position_id, 
 								'prefix_id'=>$prefix_id,
-								'extension_number'=>$extension_number,  									
+								'father_name'=>$father_name,
 								'date_of_joining'=>$date_of_joining,
 								'date_of_leaving'=>($date_of_leaving!=''?$date_of_leaving:NULL),
 								'years_exp'=>($years_exp=='')?null:$years_exp,

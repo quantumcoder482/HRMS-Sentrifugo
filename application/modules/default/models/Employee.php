@@ -53,7 +53,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         $employeesData = $this->select()
                                 ->setIntegrityCheck(false)	                                
                                 ->from(array('e' => 'main_employees_summary'),
-                                        array('*','id'=>'e.user_id','extn'=>new Zend_Db_Expr('case when e.extension_number is not null then concat(e.office_number," (ext ",e.extension_number,")") when e.extension_number is null then e.office_number end'),'astatus'=> new Zend_Db_Expr('case when e.isactive = 0 then "Inactive" when e.isactive = 1 then "Active" when e.isactive = 2 then "Resigned"  when e.isactive = 3 then "Left" when e.isactive = 4 then "Suspended" end')
+                                        array('*','id'=>'e.user_id','extn'=>new Zend_Db_Expr('case when e.father_name is not null then concat(e.work_mobilenumber," (ext ",e.father_name,")") when e.father_name is null then e.work_mobilenumber end'),'astatus'=> new Zend_Db_Expr('case when e.isactive = 0 then "Inactive" when e.isactive = 1 then "Active" when e.isactive = 2 then "Resigned"  when e.isactive = 3 then "Left" when e.isactive = 4 then "Suspended" end')
                                             ))                               
                                 ->where($where)
                                 ->order("$by $sort") 
@@ -104,7 +104,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
        $employeesData = $this->select()
                                 ->setIntegrityCheck(false)	                                
                                 ->from(array('e' => 'main_employees_summary'),
-                                        array('*','id'=>'e.user_id','extn'=>new Zend_Db_Expr('case when e.extension_number is not null then concat(e.office_number," (ext ",e.extension_number,")") when e.extension_number is null then e.office_number end'),'astatus'=> new Zend_Db_Expr('case when e.isactive = 0 then "Inactive" when e.isactive = 1 then "Active" when e.isactive = 2 then "Resigned"  when e.isactive = 3 then "Left" when e.isactive = 4 then "Suspended" end')
+                                        array('*','id'=>'e.user_id','extn'=>new Zend_Db_Expr('case when e.father_name is not null then concat(e.work_mobilenumber," (ext ",e.father_name,")") when e.father_name is null then e.work_mobilenumber end'),'astatus'=> new Zend_Db_Expr('case when e.isactive = 0 then "Inactive" when e.isactive = 1 then "Active" when e.isactive = 2 then "Resigned"  when e.isactive = 3 then "Left" when e.isactive = 4 then "Suspended" end')
                                             ))                               
                                 ->where($where)
                                 ->limit($limit, $offset)
@@ -316,7 +316,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
                     if($key == 'astatus')
                     $searchQuery .= " e.isactive like '%".$val."%' AND ";
                 else if($key == 'extn')					
-                    $searchQuery .= " concat(e.office_number,' (ext ',e.extension_number,')') like '%".$val."%' AND ";
+                    $searchQuery .= " concat(e.work_mobilenumber,' (ext ',e.father_name,')') like '%".$val."%' AND ";
                 else 
                     $searchQuery .= $key." like '%".$val."%' AND ";				
                 $searchArray[$key] = $val;
@@ -798,7 +798,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         {
             $db = Zend_Db_Table::getDefaultAdapter();
             $parray = array();
-            $query = "select workcode,workcodename from main_employmentstatus where isactive = 1 and workcodename in (8,9,10)";
+            $query = "select workcode,workcodename from main_employmentstatus where isactive = 1 and workcodename in (7,8,9,10)";
             $res = $db->query($query)->fetchAll();
             if(!empty($res))
             {

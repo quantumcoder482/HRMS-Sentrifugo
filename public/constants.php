@@ -391,6 +391,9 @@ defined('EXITPROC_DELETE')|| define('EXITPROC_DELETE','exitproc');
 defined('ASSETS_DELETE')|| define('ASSETS_DELETE','asset');
 defined('ASSETCATEGORIES_DELETE')|| define('ASSETCATEGORIES_DELETE','asset category');
 
+defined('MONTHLYPAYROLL_DELETE')|| define('MONTHLYPAYROLL_DELETE','monthly payroll');
+defined('SHIFTPAYROLL_DELETE')|| define('SHIFTPAYROLL_DELETE','shift payroll');
+
 // Installation URLS
 defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
 defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');

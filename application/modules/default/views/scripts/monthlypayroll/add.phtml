@@ -1,0 +1,308 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+ $form = $this->form;
+ $messages = $this->messages;
+//$data = $this->data;
+ $loginuserGroup = $this->loginuserGroup;
+
+ sapp_Global::generateClientValidations($this->form);
+// $requisition_view_helper = $this->Requisition();
+?>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+<div class="total-form-controller">
+    <?php echo $form->id;
+    echo $this->form->email_cnt;
+         if(isset($messages['email_cnt']))
+         {
+?> <div class="ml-alert-1-info">
+		<div class="style-1-icon info"></div>
+		<?php echo $messages['email_cnt'] ;?>	
+	</div>
+<?php 
+         }
+        ?>
+
+    <div class="new-form-ui">
+        <label class="required">Employee ID</label>
+        <div class="division"><?php echo $form->employee_id;?>
+            <span id="errors-employee_id" class="errors"><?php echo (isset($messages['employee_id'])?$messages['employee_id']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Starting Date</label>
+        <div class="division"><?php echo $form->starting_date;?>
+            <span id="errors-starting_date" class="errors"><?php echo (isset($messages['starting_date'])?$messages['starting_date']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Employee Name</label>
+        <div class="division"><?php echo $form->employee_name;?>
+            <span id="errors-employee_name" class="errors"><?php echo (isset($messages['employee_name'])?$messages['employee_name']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Department</label>
+        <div class="division"><?php echo $form->department;?>
+            <span id="errors-department" class="errors"><?php echo (isset($messages['department'])?$messages['department']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui textareaheight">
+        <label>Comments</label>
+        <div class="division"><?php echo $form->comments;?>
+            <span id="errors-comments" class="errors"><?php echo (isset($messages['comments'])?$messages['comments']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Gross Base Salary</label>
+        <div class="division"><?php echo $form->grossbase_salary;?>
+            <span id="errors-grossbase_salary" class="errors"><?php echo (isset($messages['grossbase_salary'])?$messages['grossbase_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Sick leave in Days</label>
+        <div class="division"><?php echo $form->sick_leavedays;?>
+            <span id="errors-sick_leavedays" class="errors"><?php echo (isset($messages['sick_leavedays'])?$messages['sick_leavedays']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Standby in Hours</label>
+        <div class="division"><?php echo $form->standby_hours;?>
+            <span id="errors-standby_hours" class="errors"><?php echo (isset($messages['standby_hours'])?$messages['standby_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Overtime in Hours</label>
+        <div class="division"><?php echo $form->overtime_hours;?>
+            <span id="errors-overtime_hours" class="errors"><?php echo (isset($messages['overtime_hours'])?$messages['overtime_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Addition Role/Position</label>
+        <div class="division"><?php echo $form->addition_rollposition;?>
+            <span id="errors-addition_rollposition" class="errors"><?php echo (isset($messages['addition_rollposition'])?$messages['addition_rollposition']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Weekend/National Holidays</label>
+        <div class="division"><?php echo $form->weekend_nationaldays;?>
+            <span id="errors-weekend_nationaldays" class="errors"><?php echo (isset($messages['weekend_nationaldays'])?$messages['weekend_nationaldays']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Annual leave Days</label>
+        <div class="division"><?php echo $form->annual_leavedays;?>
+            <span id="errors-annual_leavedays" class="errors"><?php echo (isset($messages['annual_leavedays'])?$messages['annual_leavedays']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Daily allowance</label>
+        <div class="division"><?php echo $form->daily_allowance;?>
+            <span id="errors-daily_allowance" class="errors"><?php echo (isset($messages['daily_allowance'])?$messages['daily_allowance']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Deduct/Add from Gross Salary</label>
+        <div class="division"><?php echo $form->deductadd_salary;?>
+            <span id="errors-deductadd_salary" class="errors"><?php echo (isset($messages['deductadd_salary'])?$messages['deductadd_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Gross Salary</label>
+        <div class="division"><?php echo $form->gross_salary;?>
+            <span id="errors-gross_salary" class="errors"><?php echo (isset($messages['gross_salary'])?$messages['gross_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Contract Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
+        <div class="division"><?php echo $form->contract_date;?>
+            <span id="errors-contract_date" class="errors"><?php echo (isset($messages['contract_date'])?$messages['contract_date']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Work Days</label>
+        <div class="division"><?php echo $form->work_days;?>
+            <span id="errors-work_days" class="errors"><?php echo (isset($messages['work_days'])?$messages['work_days']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Monthly Gross Salary</label>
+        <div class="division"><?php echo $form->monthlygross_salary;?>
+            <span id="errors-monthlygross_salary" class="errors"><?php echo (isset($messages['monthlygross_salary'])?$messages['monthlygross_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Contribution Calculated Salary</label>
+        <div class="division"><?php echo $form->contribution_salary;?>
+            <span id="errors-contribution_salary" class="errors"><?php echo (isset($messages['contribution_salary'])?$messages['contribution_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Employee Social Insurance</label>
+        <div class="division"><?php echo $form->employeesocial_insurance;?>
+            <span id="errors-employeesocial_insurance" class="errors"><?php echo (isset($messages['employeesocial_insurance'])?$messages['employeesocial_insurance']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Employee Health Insurance</label>
+        <div class="division"><?php echo $form->employeehealth_insurance;?>
+            <span id="errors-employeehealth_insurance" class="errors"><?php echo (isset($messages['employeehealth_insurance'])?$messages['employeehealth_insurance']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Total of Employee Insurance</label>
+        <div class="division"><?php echo $form->employeetotal_insurance;?>
+            <span id="errors-employeetotal_insurance" class="errors"><?php echo (isset($messages['employeetotal_insurance'])?$messages['employeetotal_insurance']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Employer Social Insurance</label>
+        <div class="division"><?php echo $form->employersocial_insurance;?>
+            <span id="errors-employersocial_insurance" class="errors"><?php echo (isset($messages['employersocial_insurance'])?$messages['employersocial_insurance']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Employer Health Insurance</label>
+        <div class="division"><?php echo $form->employerhealth_insurance;?>
+            <span id="errors-employerhealth_insurance" class="errors"><?php echo (isset($messages['employerhealth_insurance'])?$messages['employerhealth_insurance']:"");?></span>
+        </div>
+    </div>
+
+
+    <div class="new-form-ui">
+        <label>Total of Employer Insurance</label>
+        <div class="division"><?php echo $form->employertotal_insurance;?>
+            <span id="errors-employertotal_insurance" class="errors"><?php echo (isset($messages['employertotal_insurance'])?$messages['employertotal_insurance']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Salary withholding taxs are calculated</label>
+        <div class="division"><?php echo $form->whtaxpaided_salary;?>
+            <span id="errors-whtaxpaided_salary" class="errors"><?php echo (isset($messages['whtaxpaided_salary'])?$messages['whtaxpaided_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Progresive withholding Tax</label>
+        <div class="division"><?php echo $form->progresive_whtax;?>
+            <span id="errors-progresive_whtax" class="errors"><?php echo (isset($messages['progresive_whtax'])?$messages['progresive_whtax']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Net Salary paid through Bank</label>
+        <div class="division"><?php echo $form->bankpaid_salary;?>
+            <span id="errors-bankpaid_salary" class="errors"><?php echo (isset($messages['bankpaid_salary'])?$messages['bankpaid_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Withhold from Net Salary</label>
+        <div class="division"><?php echo $form->whtax_salary;?>
+            <span id="errors-whtax_salary" class="errors"><?php echo (isset($messages['whtax_salary'])?$messages['whtax_salary']:"");?></span>
+        </div>
+    </div>
+
+
+    <div class="claerall fullwidth fltleft"></div>
+
+    <div class="new-form-ui-submit">
+        <?php echo $form->submit;?>
+        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>monthlypayroll';">Cancel</button>
+    </div>
+
+
+
+</div>
+</form>
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery-te.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery-te.css" />
+<script type="text/javascript" language="javascript">
+    var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+    $(document).ready(function() {
+
+        $("#contract_date").datepicker({
+            showOn: "both",
+            buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+            buttonImageOnly: true,
+            yearRange: yearrange,
+
+            buttonText: "",
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "<?php echo DATEFORMAT_JS;?>",
+            // minDate: '+1d',
+            showButtonPanel: true,
+            onClose: function () {
+                $('#onboard_date').trigger('blur');
+            }
+        });
+
+        $("#starting_date").datepicker({
+            showOn: "both",
+            buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+            buttonImageOnly: true,
+            yearRange: yearrange,
+
+            buttonText: "",
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "<?php echo DATEFORMAT_JS;?>",
+            // minDate: '+1d',
+            showButtonPanel: true,
+            onClose: function () {
+                $('#onboard_date').trigger('blur');
+            }
+        });
+
+        $('#req_no_positions').change(function () {
+            check_zerovalue(this);
+        });
+    });
+</script>

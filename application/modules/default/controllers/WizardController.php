@@ -640,25 +640,25 @@ class Default_WizardController extends Zend_Controller_Action
 								        $workcode = 'FT';
 								        break;
 								    case 2:
-								        $workcode = 'PT';
+								        $workcode = 'PERM';
 								        break;    
 								    case 3:
-								        $workcode = 'PERM';
+								        $workcode = 'TEMP';
 								        break;
 								    case 4:
-								        $workcode = 'TEMP';
+								        $workcode = 'PT';
 								        break;
 							        case 5:
 								        $workcode = 'PROB';
 								        break;
 							        case 6:
-								        $workcode = 'CONT';
+								        $workcode = 'TRAN';
 								        break;
 							        case 7:
 								        $workcode = 'DEP';
 								        break;
 							        case 8:
-								        $workcode = 'RES';
+								        $workcode = 'RESG';
 								        break;
 								    case 9:
 								        $workcode = 'LEFT';

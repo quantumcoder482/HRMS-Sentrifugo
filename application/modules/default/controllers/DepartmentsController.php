@@ -481,19 +481,19 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					 $unitid = $this->_request->getParam('unitid');
 					 if($deptname != '' && $unitid != '')
 					 {
-					 	if(!preg_match('/^(?![0-9]{4})[a-zA-Z0-9.\- ?]+$/', $deptname))
-					 	{
-					 		$msgarray['deptname'] = "Please enter valid department name.";
+					 	// if(!preg_match('/^(?![0-9]{4})[a-zA-Z0-9.\- ?]+$/', $deptname))
+					 	// {
+					 	// 	$msgarray['deptname'] = "Please enter valid department name.";
+							// $flag = 'false';
+					 	// }else
+					 	// {
+					    $checkExists = $deptModel->checkExistance($deptname,$unitid,$id);
+						if($checkExists != 0)
+						{
+							$msgarray['deptname'] = "Department name already exists.";
 							$flag = 'false';
-					 	}else
-					 	{
-						   $checkExists = $deptModel->checkExistance($deptname,$unitid,$id);
-							 if($checkExists != 0)
-							 {
-								$msgarray['deptname'] = "Department name already exists.";
-								$flag = 'false';
-							 }	
-					 	} 
+						}	
+					 	// } 
 					 }else $flag = 'false';
 					 
 					$start_date = $this->_request->getParam('start_date',null);				

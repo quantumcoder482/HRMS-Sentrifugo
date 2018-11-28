@@ -61,7 +61,7 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 		//for isactive=0 menus for approved requisition and rejected requisitions
 	    //$controllers_arr2= $menu_model->getControllersByRolesforRequisition($role_id);
        // $controllers_arr=array_merge($controllers_arr1,$controllers_arr2);
-	
+
 		if($dataArray['objectname'] == 'interviewrounds') $actionsobjname = 'scheduleinterviews';
 		else $actionsobjname = $dataArray['objectname'];
 		if(isset($controllers_arr[$actionsobjname."controller.php"]))
@@ -327,8 +327,8 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 	 */
 
 	public function generateGrid ($name, $fields = null,$paginator=null,$extracolumn=array(),$sorting=false,$jsGridFnname='', $perPage='5',$page='1', $jsFillFnName='',$searchArray='',$formgrid='false',$addaction='',$menuName='',$unitId,$addpermission,$actns='',$menunamestr,$call='',$sortStr='',$search_filters = '',$dashboardCall = 'No',$actnArr,$sortname='',$by='') {
-        
-		$request = Zend_Controller_Front::getInstance();
+
+      	$request = Zend_Controller_Front::getInstance();
         $params = $request->getRequest()->getParams();		
         $menu_model = new Default_Model_Menu();
         $controllerName = $request->getRequest()->getControllerName();
