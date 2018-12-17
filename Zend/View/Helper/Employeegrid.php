@@ -199,8 +199,13 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 			$viewpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
 			$editpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
 			$deletepopup_str = '<a name="{{id}}" onclick= changeEmployeestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\',\''.$dataArray['userid'].'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-			
-			
+
+
+            if($dataArray['objectname'] == 'emppayslips'){
+                $viewpopup_str = '<a href="'.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.'" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+
+            }
+
 			if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
 			{
 				if($dataArray['objectname'] == 'processes')
@@ -213,15 +218,21 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 				  }
 				  else 
 					$extra['action'] =array(); 				  
-				}else
-				{
-				
-				  $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-								'.((in_array('view',$actions_arr)?$viewpopup_str:'')).'
-								'.((in_array('edit',$actions_arr)?$editpopup_str:'')).'
-								'.((in_array('delete',$actions_arr)?$deletepopup_str:'')).'
-							</div>'); 
+			}else
+			{
+
+			  $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+							'.((in_array('view',$actions_arr)?$viewpopup_str:'')).'
+							'.((in_array('edit',$actions_arr)?$editpopup_str:'')).'
+							'.((in_array('delete',$actions_arr)?$deletepopup_str:'')).'
+						</div>');
+
+				if($dataArray['objectname'] == 'emppayslips'){
+                    $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+							'.((in_array('view',$actions_arr)?$viewpopup_str:'')).'
+						</div>');
 				}
+			}
 			
 						
 		}
@@ -269,6 +280,10 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 		else
 		{
 		 $addpermission = "false";
+		}
+
+		if($dataArray['objectname'] == 'emppayslips'){
+			$addpermission = "false";
 		}
 		
 		if(isset($dataArray['unitId'])) $unitId = $dataArray['unitId'];
@@ -639,6 +654,12 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
                                                 var fval = $('#'+focusID).attr('data-focus');
                                                 if(fval == '' || fval == null)
 						$('#'+focusID).focus().val('').val(coldata);
+					</script>";
+
+		$output.= "<script type='text/javascript'>
+					function displaypdf(url){
+					    alert(url);
+					}
 					</script>";
 		return $output;
 	}

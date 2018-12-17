@@ -29,7 +29,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 	   II. If roles are not configured then to eliminate users and other vendors we are using jobtitle clause.
 	       As for jobtitle id for vendors and users will always be null.
 	*/
-     public function getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$managerid='',$loginUserId)
+    public function getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$managerid='',$loginUserId)
     {
     	$auth = Zend_Auth::getInstance();
     	$request = Zend_Controller_Front::getInstance();

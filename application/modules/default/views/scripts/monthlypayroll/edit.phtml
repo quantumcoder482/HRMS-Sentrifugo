@@ -24,6 +24,7 @@
  $form = $this->form;
  $messages = $this->messages;
  $data = $this->data;
+ $edit_flag = $this->edit_flag;
  $loginuserGroup = $this->loginuserGroup;
  sapp_Global::generateClientValidations($this->form);
 // $requisition_view_helper = $this->Requisition();
@@ -49,24 +50,26 @@ if($this->nodata == 'nodata') {
          }
         ?>
 
+    <input type="hidden" name="edit_flag" value="<?php echo $edit_flag;?>" />
+    <input type="hidden" name="shiftpayroll" id="shiftpayroll" value="<?php echo $data['shiftpayroll'];?>" />
     <div class="new-form-ui">
         <label>Employee ID</label>
-        <div class="division"><input type='text' disabled value='<?php echo $this->data['employee_id'];?>' /></div>
+        <div class="division"><?php echo $form->employee_id;?> </div>
     </div>
 
     <div class="new-form-ui">
         <label class="required">Starting Date</label>
-        <div class="division"><input type='text' disabled value='<?php echo $this->data['starting_date'];?>' /></div>
+        <div class="division"><?php echo $form->starting_date;?></div>
     </div>
 
     <div class="new-form-ui">
         <label class="required">Employee Name</label>
-        <div class="division"><input type='text' disabled value='<?php echo $this->data['employee_name'];?>' /></div>
+        <div class="division"><?php echo $form->employee_name;?></div>
     </div>
 
     <div class="new-form-ui">
         <label class="required">Department</label>
-        <div class="division"><input type='text' disabled value='<?php echo $this->data['department'];?>' /></div>
+        <div class="division"><?php echo $form->department;?></div>
     </div>
 
     <div class="new-form-ui textareaheight">
@@ -78,7 +81,7 @@ if($this->nodata == 'nodata') {
 
     <div class="new-form-ui">
         <label class="required">Gross Base Salary</label>
-        <div class="division"><input type='text' disabled value='<?php echo $this->data['grossbase_salary'];?>' /></div>
+        <div class="division"><?php echo $form->grossbase_salary;?></div>
     </div>
 
     <div class="new-form-ui">
@@ -146,7 +149,7 @@ if($this->nodata == 'nodata') {
 
     <div class="new-form-ui">
         <label class="required">Contract Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
-        <div class="division"><input type='text' disabled value='<?php echo $this->data['contract_date'];?>' /></div>
+        <div class="division"><?php echo $form->contract_date;?></div>
     </div>
 
     <div class="new-form-ui">
@@ -235,18 +238,31 @@ if($this->nodata == 'nodata') {
     </div>
 
     <div class="new-form-ui">
+        <label>Adds to Net Salary</label>
+        <div class="division"><?php echo $form->addtax_salary;?>
+            <span id="errors-addtax_salary" class="errors"><?php echo (isset($messages['addtax_salary'])?$messages['addtax_salary']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
         <label>Withhold from Net Salary</label>
         <div class="division"><?php echo $form->whtax_salary;?>
             <span id="errors-whtax_salary" class="errors"><?php echo (isset($messages['whtax_salary'])?$messages['whtax_salary']:"");?></span>
         </div>
     </div>
 
+    <div class="new-form-ui">
+        <label>Total Net Salary</label>
+        <div class="division"><?php echo $form->total_bankpaid_salary;?>
+            <span id="errors-total_bankpaid_salary" class="errors"><?php echo (isset($messages['total_bankpaid_salary'])?$messages['total_bankpaid_salary']:"");?></span>
+        </div>
+    </div>
 
     <div class="claerall fullwidth fltleft"></div>
 
     <div class="new-form-ui-submit">
         <?php echo $form->submit;?>
-        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>monthlypayroll';">Cancel</button>
+        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>shiftpayroll';">Cancel</button>
     </div>
 
 
@@ -298,5 +314,157 @@ if($this->nodata == 'nodata') {
         $('#req_no_positions').change(function () {
             check_zerovalue(this);
         });
+
+
+        var change_values = function(){
+
+            var $grossbase_salary = Number($('#grossbase_salary').val())?Number($('#grossbase_salary').val()):0;
+            var $gross_salary = Number($('#gross_salary').val())?Number($('#gross_salary').val()):0;
+            var $sick_leavedays = Number($('#sick_leavedays').val())?Number($('#sick_leavedays').val()):0;
+            var $standby_hours = Number($('#standby_hours').val())?Number($('#standby_hours').val()):0;
+            var $overtime_hours = Number($('#overtime_hours').val())?Number($('#overtime_hours').val()):0;
+            var $addition_rollposition = Number($('#addition_rollposition').val())?Number($('#addition_rollposition').val()):0;
+            var $weekend_nationaldays = Number($('#weekend_nationaldays').val())?Number($('#weekend_nationaldays').val()):0;
+            var $annual_leavedays = Number($('#annual_leavedays').val())?Number($('#annual_leavedays').val()):0;
+            var $daily_allowance = Number($('#daily_allowance').val())?Number($('#daily_allowance').val()):0;
+            var $deductadd_salary = Number($('#deductadd_salary').val())?Number($('#deductadd_salary').val()):0;
+            var $work_days = Number($('#work_days').val())?Number($('#work_days').val()):0;
+            var $whtax_salary = Number($('#whtax_salary').val())?Number($('#whtax_salary').val()):0;
+            var $addtax_salary = Number($('#addtax_salary').val())?Number($('#addtax_salary').val()):0;
+            var $shiftpayroll = Number($('#shiftpayroll').val());
+
+
+            // Variables initialize
+
+            var $monthlygross_salary = 0;
+            var $contribution_salary = 0;
+            var $employeesocial_insurance = 0;
+            var $employeehealth_insurance = 0;
+            var $employeetotal_insurance = 0;
+            var $employersocial_insurance = 0;
+            var $employerhealth_insurance = 0;
+            var $employertotal_insurance = 0;
+            var $whtaxpaided_salary = 0;
+            var $progresive_whtax = 0;
+            var $bankpaid_salary = 0;
+            var $total_bankpaid_salary = 0;
+            // var $gross_salary = 0;
+
+
+            if($shiftpayroll){
+                $monthlygross_salary = $gross_salary;
+            } else {
+                $gross_salary = $grossbase_salary + $deductadd_salary;
+
+                if($sick_leavedays){
+                    // $work_days = $work_days - $sick_leavedays;
+                    $gross_salary = $gross_salary - ($grossbase_salary/21)*$sick_leavedays*0.2;
+                }
+                if($standby_hours){
+                    $gross_salary = $gross_salary - $standby_hours*120;
+                }
+                if($overtime_hours){
+                    $gross_salary = $gross_salary + $overtime_hours*($grossbase_salary/21/8)*0.25;
+                }
+                if($addition_rollposition){
+                    $gross_salary = $gross_salary + $addition_rollposition;
+                }
+                if($weekend_nationaldays){
+                    $gross_salary = $gross_salary + $weekend_nationaldays*4500;
+                }
+                if($daily_allowance){
+                    $gross_salary = $gross_salary + $daily_allowance*400;
+                }
+
+                $monthlygross_salary = $gross_salary * $work_days/21;
+            }
+
+
+            $contribution_salary = $monthlygross_salary>=105850?105850:($monthlygross_salary<=24000?24000:$monthlygross_salary);
+            $employeesocial_insurance = $contribution_salary * 0.095;
+            $employeehealth_insurance = $monthlygross_salary * 0.017;
+            $employeetotal_insurance = $employeesocial_insurance + $employeehealth_insurance;
+            $employersocial_insurance = $contribution_salary * 0.15;
+            $employerhealth_insurance = $monthlygross_salary * 0.017;
+            $employertotal_insurance = $employersocial_insurance + $employerhealth_insurance;
+            $whtaxpaided_salary = $monthlygross_salary;
+
+            if($whtaxpaided_salary <= 30000){
+                $progresive_whtax = 0;
+            }else if($whtaxpaided_salary > 130000){
+                $progresive_whtax = ($whtaxpaided_salary - 130000)*0.23 +13000;
+            }else{
+                $progresive_whtax = ($whtaxpaided_salary - 30000)*0.13;
+            }
+
+            $bankpaid_salary = $whtaxpaided_salary - $employeetotal_insurance - $progresive_whtax;
+
+            $total_bankpaid_salary = $bankpaid_salary - $whtax_salary + $addtax_salary;
+
+
+
+            // Setting Values of each elements
+
+            $('#gross_salary').val(Math.round($gross_salary));
+            $('#monthlygross_salary').val(Math.round($monthlygross_salary));
+            $('#contribution_salary').val(Math.round($contribution_salary));
+            $('#employeesocial_insurance').val(Math.round($employeesocial_insurance));
+            $('#employeehealth_insurance').val(Math.round($employeehealth_insurance))
+            $('#employeetotal_insurance').val(Math.round($employeetotal_insurance));
+            $('#employersocial_insurance').val(Math.round($employersocial_insurance));
+            $('#employerhealth_insurance').val(Math.round($employerhealth_insurance));
+            $('#employertotal_insurance').val(Math.round($employertotal_insurance));
+            $('#whtaxpaided_salary').val(Math.round($whtaxpaided_salary));
+            $('#progresive_whtax').val(Math.round($progresive_whtax));
+            $('#bankpaid_salary').val(Math.round($bankpaid_salary));
+            $('#total_bankpaid_salary').val(Math.round($total_bankpaid_salary));
+
+        }
+
+        $('#comment').change(function(){
+            change_values();
+        });
+
+        $('#sick_leavedays').change(function(){
+            change_values();
+        });
+
+        $('#standby_hours').change(function(){
+            change_values();
+        });
+
+        $('#overtime_hours').change(function(){
+            change_values();
+        });
+
+        $('#annual_leavedays').change(function(){
+            change_values();
+        });
+
+        $('#weekend_nationaldays').change(function(){
+            change_values();
+        });
+
+        $('#daily_allowance').change(function(){
+            change_values();
+        });
+
+        $('#deductadd_salary').change(function(){
+            change_values();
+        });
+
+        $('#work_days').change(function(){
+            change_values();
+        });
+
+        $('#whtax_salary').change(function(){
+            change_values();
+        });
+        $('#addtax_salary').change(function(){
+            change_values();
+        });
+
+
+
     });
 </script>

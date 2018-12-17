@@ -37,20 +37,23 @@ class Default_Form_Monthlypayroll extends Zend_Form
             $loginuserRole = $auth->getStorage()->read()->emprole;
             $loginuserGroup = $auth->getStorage()->read()->group_id;
         }
-        $id = new Zend_Form_Element_Hidden('id');
-
 
         /**
          *  Define Form Elements
          *
          */
-        $employee_id = new Zend_Form_Element_Select('employee_id');
-        $employee_id->setAttrib('title', 'Employee Code.');
-        $employee_id->setAttrib('class', 'formDataElement');
-        $employee_id->setAttrib('onChange', 'getEmployeeData(this)');
-        $employee_id->addMultiOptions(array(''=>'Select Employee','AMD006'=>'AMD006'));
+        $id = new Zend_Form_Element_Hidden('id');
 
+//        $employee_id = new Zend_Form_Element_Select('employee_id');
+//        $employee_id->setAttrib('title', 'Employee Code.');
+//        $employee_id->setAttrib('class', 'formDataElement');
+//        $employee_id->setAttrib('onChange', 'getEmployeeData(this)');
+//        $employee_id->addMultiOptions(array(''=>'Select Employee', 'AMD158'));
 
+        $employee_id = new Zend_Form_Element_Text('employee_id');
+        $employee_id->setAttrib('maxLength', 20);
+        $employee_id->setAttrib('title', 'Employee ID.');
+        $employee_id->addFilter(new Zend_Filter_StringTrim());
 
         $starting_date = new Zend_Form_Element_Text('starting_date');
         $starting_date->setAttrib('maxLength', 10);
@@ -194,10 +197,20 @@ class Default_Form_Monthlypayroll extends Zend_Form
         $bankpaid_salary->setAttrib('title', 'Net salary to be paid through bank account.');
         $bankpaid_salary->addFilter(new Zend_Filter_StringTrim());
 
+        $addtax_salary = new Zend_Form_Element_Text('addtax_salary');
+        $addtax_salary->setAttrib('maxLength', 10);
+        $addtax_salary->setAttrib('title', 'Adds to Net Salary.');
+        $addtax_salary->addFilter(new Zend_Filter_StringTrim());
+
         $whtax_salary = new Zend_Form_Element_Text('whtax_salary');
         $whtax_salary->setAttrib('maxLength', 10);
         $whtax_salary->setAttrib('title', 'Withhold from Net Salary.');
         $whtax_salary->addFilter(new Zend_Filter_StringTrim());
+
+        $total_bankpaid_salary = new Zend_Form_Element_Text('total_bankpaid_salary');
+        $total_bankpaid_salary->setAttrib('maxLength', 10);
+        $total_bankpaid_salary->setAttrib('title', 'Total salary to be paid through bank account.');
+        $total_bankpaid_salary->addFilter(new Zend_Filter_StringTrim());
 
 
         /**
@@ -225,8 +238,8 @@ class Default_Form_Monthlypayroll extends Zend_Form
         $gross_salary->setRequired(true);
         $gross_salary->addValidator('NotEmpty', false, array('messages' => 'Please select Employee ID.'));
 
-        $contract_date->setRequired(true);
-        $contract_date->addValidator('NotEmpty', false, array('messages' => 'Please select Employee ID.'));
+//        $contract_date->setRequired(true);
+//        $contract_date->addValidator('NotEmpty', false, array('messages' => 'Please select Employee ID.'));
 
         $work_days->setRequired(true);
         $work_days->addValidator('NotEmpty', false, array('messages' => 'Please select Employee ID.'));
@@ -277,6 +290,8 @@ class Default_Form_Monthlypayroll extends Zend_Form
         $bankpaid_salary->setRequired(true);
         $bankpaid_salary->addValidator('NotEmpty', false, array('messages' => 'Please select Employee ID.'));
 
+        $total_bankpaid_salary->setRequired(true);
+        $total_bankpaid_salary->addValidator('NotEmpty', false, array('messages' => 'Please select Employee ID.'));
 
         $sick_leavedays->addValidator("regex",true,array(
                 'pattern'=>'/^([0-9]+?)+$/',
@@ -357,9 +372,36 @@ class Default_Form_Monthlypayroll extends Zend_Form
         ));
 
         $deductadd_salary->addValidator("regex",true,array(
+            'pattern'=>'/^-?([0-9]+?)+$/',
+            'messages'=>array(
+                'regexNotMatch'=>'Please enter only numbers.'
+            )
+        ));
+
+
+        $addtax_salary->addValidator("regex",true,array(
             'pattern'=>'/^([0-9]+?)+$/',
             'messages'=>array(
                 'regexNotMatch'=>'Please enter only numbers.'
+            )
+        ));
+        $addtax_salary->addValidator("greaterThan",true,array(
+            'min'=>0,
+            'messages'=>array(
+                'notGreaterThan'=>'No.of positions cannot be zero.'
+            )
+        ));
+
+        $whtax_salary->addValidator("regex",true,array(
+            'pattern'=>'/^([0-9]+?)+$/',
+            'messages'=>array(
+                'regexNotMatch'=>'Please enter only numbers.'
+            )
+        ));
+        $whtax_salary->addValidator("greaterThan",true,array(
+            'min'=>0,
+            'messages'=>array(
+                'notGreaterThan'=>'No.of positions cannot be zero.'
             )
         ));
 
@@ -378,7 +420,7 @@ class Default_Form_Monthlypayroll extends Zend_Form
         $this->addElements(array($id,$submit,$employee_id, $starting_date, $employee_name, $department, $comments, $sick_leavedays, $standby_hours, $overtime_hours, $addition_rollposition, $annual_leavedays,
                 $weekend_nationaldays, $daily_allowance, $gross_salary, $grossbase_salary, $deductadd_salary, $contract_date, $work_days, $monthlygross_salary, $contribution_salary,
                 $employeesocial_insurance, $employeehealth_insurance, $employeetotal_insurance, $employersocial_insurance, $employerhealth_insurance, $employertotal_insurance,
-                $whtax_salary, $whtaxpaided_salary, $progresive_whtax, $bankpaid_salary));
+                $whtax_salary, $whtaxpaided_salary, $progresive_whtax, $bankpaid_salary, $addtax_salary, $whtax_salary, $total_bankpaid_salary));
         $this->setElementDecorators(array('ViewHelper'));
 
     }

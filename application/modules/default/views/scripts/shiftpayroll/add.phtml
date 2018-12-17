@@ -1,0 +1,355 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+ $form = $this->form;
+ $messages = $this->messages;
+//$data = $this->data;
+ $loginuserGroup = $this->loginuserGroup;
+
+ sapp_Global::generateClientValidations($this->form);
+// $requisition_view_helper = $this->Requisition();
+?>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+<div class="total-form-controller">
+    <?php echo $form->id;
+    echo $this->form->email_cnt;
+         if(isset($messages['email_cnt']))
+         {
+?> <div class="ml-alert-1-info">
+		<div class="style-1-icon info"></div>
+		<?php echo $messages['email_cnt'] ;?>	
+	</div>
+<?php 
+         }
+        ?>
+
+    <div class="new-form-ui">
+        <label class="required">Employee ID</label>
+        <div class="division"><?php echo $form->employee_id;?>
+            <span id="errors-employee_id" class="errors"><?php echo (isset($messages['employee_id'])?$messages['employee_id']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Employee Name</label>
+        <div class="division"><?php echo $form->employee_name;?>
+            <span id="errors-employee_name" class="errors"><?php echo (isset($messages['employee_name'])?$messages['employee_name']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Gross Salary(hour)</label>
+        <div class="division"><?php echo $form->gross_salary_hours;?>
+            <span id="errors-gross_salary_hours" class="errors"><?php echo (isset($messages['gross_salary_hours'])?$messages['gross_salary_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+
+    </div>
+
+    <div class="new-form-ui">
+
+    </div>
+
+    <div class="new-form-ui">
+
+    </div>
+
+
+    <div class="new-form-ui">
+        <label>Shift1(08~16)</label>
+        <div class="division"><?php echo $form->shift1_hours;?>
+            <span id="errors-shift1_hours" class="errors"><?php echo (isset($messages['shift1_hours'])?$messages['shift1_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Shift2(16~19)</label>
+        <div class="division"><?php echo $form->shift21_hours;?>
+            <span id="errors-shift21_hours" class="errors"><?php echo (isset($messages['shift21_hours'])?$messages['shift21_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Shift2(19~22)</label>
+        <div class="division"><?php echo $form->shift22_hours;?>
+            <span id="errors-shift22_hours" class="errors"><?php echo (isset($messages['shift22_hours'])?$messages['shift22_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Shift2(22~24)</label>
+        <div class="division"><?php echo $form->shift23_hours;?>
+            <span id="errors-shift23_hours" class="errors"><?php echo (isset($messages['shift23_hours'])?$messages['shift23_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Shift3(00~06)</label>
+        <div class="division"><?php echo $form->shift31_hours;?>
+            <span id="errors-shift31_hours" class="errors"><?php echo (isset($messages['shift31_hours'])?$messages['shift31_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Shift3(06~08)</label>
+        <div class="division"><?php echo $form->shift32_hours;?>
+            <span id="errors-shift32_hours" class="errors"><?php echo (isset($messages['shift32_hours'])?$messages['shift32_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Sunday Shift1(08~16)</label>
+        <div class="division"><?php echo $form->sunday_shift1_hours;?>
+            <span id="errors-sunday_shift1_hours" class="errors"><?php echo (isset($messages['sunday_shift1_hours'])?$messages['sunday_shift1_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Sunday Shift2(16~19)</label>
+        <div class="division"><?php echo $form->sunday_shift21_hours;?>
+            <span id="errors-sunday_shift21_hours" class="errors"><?php echo (isset($messages['sunday_shift21_hours'])?$messages['sunday_shift21_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Sunday Shift2(19~22)</label>
+        <div class="division"><?php echo $form->sunday_shift22_hours;?>
+            <span id="errors-sunday_shift22_hours" class="errors"><?php echo (isset($messages['sunday_shift22_hours'])?$messages['sunday_shift22_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Sunday Shift2(22~24)</label>
+        <div class="division"><?php echo $form->sunday_shift23_hours;?>
+            <span id="errors-sunday_shift23_hours" class="errors"><?php echo (isset($messages['sunday_shift23_hours'])?$messages['sunday_shift23_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Sunday Shift3(00~06)</label>
+        <div class="division"><?php echo $form->sunday_shift31_hours;?>
+            <span id="errors-sunday_shift31_hours" class="errors"><?php echo (isset($messages['sunday_shift31_hours'])?$messages['sunday_shift31_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Sunday Shift3(06~08)</label>
+        <div class="division"><?php echo $form->sunday_shift32_hours;?>
+            <span id="errors-sunday_shift32_hours" class="errors"><?php echo (isset($messages['sunday_shift32_hours'])?$messages['sunday_shift32_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Holiday Shift1(08~16)</label>
+        <div class="division"><?php echo $form->holiday_shift1_hours;?>
+            <span id="errors-holiday_shift1_hours" class="errors"><?php echo (isset($messages['holiday_shift1_hours'])?$messages['holiday_shift1_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Holiday Shift2(16~19)</label>
+        <div class="division"><?php echo $form->holiday_shift21_hours;?>
+            <span id="errors-holiday_shift21_hours" class="errors"><?php echo (isset($messages['holiday_shift21_hours'])?$messages['holiday_shift21_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Holiday Shift2(19~22)</label>
+        <div class="division"><?php echo $form->holiday_shift22_hours;?>
+            <span id="errors-holiday_shift22_hours" class="errors"><?php echo (isset($messages['holiday_shift22_hours'])?$messages['holiday_shift22_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Holiday Shift2(22~24)</label>
+        <div class="division"><?php echo $form->holiday_shift23_hours?>
+            <span id="errors-holiday_shift23_hours" class="errors"><?php echo (isset($messages['holiday_shift23_hours'])?$messages['holiday_shift23_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Holiday Shift3(00~06)</label>
+        <div class="division"><?php echo $form->holiday_shift31_hours;?>
+            <span id="errors-holiday_shift31_hours" class="errors"><?php echo (isset($messages['holiday_shift31_hours'])?$messages['holiday_shift31_hours']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Holiday Shift3(06~08)</label>
+        <div class="division"><?php echo $form->holiday_shift32_hours;?>
+            <span id="errors-holiday_shift32_hours" class="errors"><?php echo (isset($messages['holiday_shift32_hours'])?$messages['holiday_shift32_hours']:"");?></span>
+        </div>
+    </div>
+
+
+    <div class="new-form-ui">
+        <label>Total Hours</label>
+        <div class="division"><?php echo $form->total_hours;?>
+            <span id="errors-total_hours" class="errors"><?php echo (isset($messages['total_hours'])?$messages['total_hours']:"");?></span>
+        </div>
+    </div>
+
+
+
+    <div class="claerall fullwidth fltleft"></div>
+
+    <div class="new-form-ui-submit">
+        <?php echo $form->submit;?>
+        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>shiftpayroll';">Cancel</button>
+    </div>
+
+
+
+</div>
+</form>
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery-te.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery-te.css" />
+<script type="text/javascript" language="javascript">
+
+    var change_values = function(){
+
+        var $shift1_hours= Number($('#shift1_hours').val())?Number($('#shift1_hours').val()):0;
+        var $shift21_hours= Number($('#shift21_hours').val())?Number($('#shift21_hours').val()):0;
+        var $shift22_hours= Number($('#shift22_hours').val())?Number($('#shift22_hours').val()):0;
+        var $shift23_hours= Number($('#shift23_hours').val())?Number($('#shift23_hours').val()):0;
+        var $shift31_hours= Number($('#shift31_hours').val())?Number($('#shift31_hours').val()):0;
+        var $shift32_hours= Number($('#shift32_hours').val())?Number($('#shift32_hours').val()):0;
+
+
+        var $sunday_shift1_hours= Number($('#sunday_shift1_hours').val())?Number($('#sunday_shift1_hours').val()):0;
+        var $sunday_shift21_hours= Number($('#sunday_shift21_hours').val())?Number($('#sunday_shift21_hours').val()):0;
+        var $sunday_shift22_hours= Number($('#sunday_shift22_hours').val())?Number($('#sunday_shift22_hours').val()):0;
+        var $sunday_shift23_hours= Number($('#sunday_shift23_hours').val())?Number($('#sunday_shift23_hours').val()):0;
+        var $sunday_shift31_hours= Number($('#sunday_shift31_hours').val())?Number($('#sunday_shift31_hours').val()):0;
+        var $sunday_shift32_hours= Number($('#sunday_shift32_hours').val())?Number($('#sunday_shift32_hours').val()):0;
+
+
+        var $holiday_shift1_hours= Number($('#holiday_shift1_hours').val())?Number($('#holiday_shift1_hours').val()):0;
+        var $holiday_shift21_hours= Number($('#holiday_shift21_hours').val())?Number($('#holiday_shift21_hours').val()):0;
+        var $holiday_shift22_hours= Number($('#holiday_shift22_hours').val())?Number($('#holiday_shift22_hours').val()):0;
+        var $holiday_shift23_hours= Number($('#holiday_shift23_hours').val())?Number($('#holiday_shift23_hours').val()):0;
+        var $holiday_shift31_hours= Number($('#holiday_shift31_hours').val())?Number($('#holiday_shift31_hours').val()):0;
+        var $holiday_shift32_hours= Number($('#holiday_shift32_hours').val())?Number($('#holiday_shift32_hours').val()):0;
+
+
+        var $total_hours = $shift1_hours+$shift21_hours+$shift22_hours+$shift23_hours+$shift31_hours+$shift32_hours;
+        $total_hours += $sunday_shift1_hours+$sunday_shift21_hours+$sunday_shift22_hours+$sunday_shift23_hours+$sunday_shift31_hours+$sunday_shift32_hours;
+        $total_hours += $holiday_shift1_hours+$holiday_shift21_hours+$holiday_shift22_hours+$holiday_shift23_hours+$holiday_shift31_hours+$holiday_shift32_hours;
+
+
+        $('#total_hours').val($total_hours);
+
+    }
+
+    var getEmployeeName = function(ele){
+        if(ele.selectedIndex != -1){
+            id = ele[ele.selectedIndex].value;
+        }else{
+            id = '';
+        }
+        $.post(base_url+'/shiftpayroll/getemployeedata/',{employee_id:id}, function(response){
+            $('#employee_name').val(response.userfullname);
+        },'json');
+
+    }
+
+    $('#shift1_hours').change(function(){
+        change_values();
+    });
+
+    $('#shift21_hours').change(function(){
+        change_values();
+    });
+
+    $('#shift22_hours').change(function(){
+        change_values();
+    });
+
+    $('#shift23_hours').change(function(){
+        change_values();
+    });
+
+    $('#shift31_hours').change(function(){
+        change_values();
+    });
+
+    $('#shift32_hours').change(function(){
+        change_values();
+    });
+
+
+
+    $('#sunday_shift1_hours').change(function(){
+        change_values();
+    });
+
+    $('#sunday_shift21_hours').change(function(){
+        change_values();
+    });
+
+    $('#sunday_shift22_hours').change(function(){
+        change_values();
+    });
+
+    $('#sunday_shift23_hours').change(function(){
+        change_values();
+    });
+
+    $('#sunday_shift31_hours').change(function(){
+        change_values();
+    });
+
+    $('#sunday_shift32_hours').change(function(){
+        change_values();
+    });
+
+
+    $('#holiday_shift1_hours').change(function(){
+        change_values();
+    });
+
+    $('#holiday_shift21_hours').change(function(){
+        change_values();
+    });
+
+    $('#holiday_shift22_hours').change(function(){
+        change_values();
+    });
+
+    $('#holiday_shift23_hours').change(function(){
+        change_values();
+    });
+
+    $('#holiday_shift31_hours').change(function(){
+        change_values();
+    });
+
+    $('#holiday_shift32_hours').change(function(){
+        change_values();
+    });
+
+</script>

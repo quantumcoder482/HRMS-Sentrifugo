@@ -43,6 +43,20 @@ if (count($this->messages))
 <?php
 if($this->call != 'ajaxcall'){
     ?>
+
+    <input type="hidden" id="term" value="<?php echo $this->term; ?>" />
+    <div id="error_message"></div>
+    <div>
+<!--        <button class="py-button" style="float: right" onclick="excelexport()" --><?php //if($this->export_payroll == "disabled"){ ?><!-- disabled --><?php //}?><!-- >Export Excel</button>-->
+        <!--        <button class="py-button" style="float: right" onclick="createpayslip()" --><?php //if($this->export_payroll == "disabled"){ ?><!-- disabled --><?php //}?><!-- >Create Payslip</button>-->
+        <div class="sprite export-xls" <?php if($this->export_payroll != "disabled"){ ?> onclick="excelexport()" <?php }?> id="export_excel" >Export to Excel</div>
+        <div class="sprite export-pdf"  <?php if($this->export_payroll != "disabled"){ ?> onclick="createpayslip()" <?php }?> id="pdf">Create Payslips</div>
+        <button class="py-button" style="float: left" onclick="createpayroll()" <?php if($this->create_monthlypayroll == "disabled"){ ?> disabled <?php }?> >Create new payroll</button>
+        <button class="py-button" style="width: 30px; margin-right: 0px !important; margin-left: 10px" onclick="decrease_month()"> < </button>
+        <button class="py-button" style="width: 30px; margin-left: 0px !important;" onclick="increase_month()"> > </button>
+        <button class="py-button" style="width: 50px; margin-left: 5px" onclick="this_month()">today</button>
+        <span style="font-size: 15px; font-weight: 600; margin-left: 30px; " id="month_year"></span>
+    </div>
     <div class="count_new_dis_par">
         <div  class="count_new_dis" id="op" onClick="displaypayrolldata('<?php echo sapp_Global::_encrypt(1);?>','monthlypayroll');"><span>OP</span><br><label><?php echo $this->op_count;?></label></div>
         <div  class="count_new_dis" id="non_op" onClick="displaypayrolldata('<?php echo sapp_Global::_encrypt(2);?>','monthlypayroll');"><span>NON-OP</span><br><label><?php echo $this->nonop_count;?></label></div>
@@ -51,30 +65,6 @@ if($this->call != 'ajaxcall'){
     <?php
 }
 ?>
-
-<!--<input type="text" id="statusid" name="statusid" value="" class="select2-offscreen" >-->
-<?php if($this->req_type==5)
-{
-
-    if($this->call != 'ajaxcall'){
-        ?>
-        <div id="error_message"></div>
-        <div class="total-form-controller">
-            <div class="new-form-ui" style="height:auto;">
-                <div class="division"><select id="statusid" name="statusid" class="select2-offscreen" tabindex="-1" onchange = "displayStatusdata('requisition')">
-                        <option value="<?php echo sapp_Global::_encrypt(2);?>">Approved</option>
-                        <option value="<?php echo sapp_Global::_encrypt(4);?>">Closed</option>
-                        <option value="<?php echo sapp_Global::_encrypt(6);?>">Complete</option>
-                        <option value="<?php echo sapp_Global::_encrypt(7);?>">In process</option>
-                        <option value="<?php echo sapp_Global::_encrypt(5);?>">On hold</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <?php
-    }
-
-}?>
 
 <?php
 
@@ -86,13 +76,13 @@ if($this->call == 'ajaxcall'){
 //var_dump($this->dataArray);
 echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->payrollgrid($this->dataArray).$endDiv;
 ?>
-<div id="requisitionContainer"  style="display: none; overflow: auto;">
+<div id="monthlypayrollContainer"  style="display: none; overflow: auto;">
     <div class="heading">
         <a href="javascript:void(0)">
             <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
     </div>
 
-    <iframe id="requisitionCont" class="business_units_iframe" frameborder="0"></iframe>
+    <iframe id="monthlypayrollCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
 <script type="text/javascript" language="javascript">
 
@@ -105,9 +95,86 @@ echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: b
         <?php endforeach; ?>
         <?php endif; ?>
 
+        var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+        var term = $('#term').val();
+        var term_arr = term.split('-');
+        var year = term_arr[0];
+        var month =Number(term_arr[1]);
+        var day = term_arr[2];
+
+        var month_year_string = months[month-1]+"   "+year;
+        $('#month_year').append(month_year_string);
 
 
     });
+
+
+    var createpayroll= function(){
+        var term = $('#term').val();
+        window.location.href = base_url+'/monthlypayroll/index/newpayroll/'+term;
+    }
+
+
+    var excelexport = function(){
+        var term = $('#term').val();
+        window.location.href = base_url+'/monthlypayroll/getexcelexport/term/'+term;
+    }
+
+    var createpayslip =function(){
+        var term = $('#term').val();
+        window.location.href = base_url+'/monthlypayroll/payslip/term/'+term;
+    }
+
+    function increase_month(){
+        var term = $('#term').val();
+        var term_arr = term.split('-');
+        var year = term_arr[0];
+        var month = Number(term_arr[1]);
+        var day = term_arr[2];
+
+        month = Number(month) + 1;
+        if(month>=13){
+            year = Number(year)+1;
+            month = 1;
+        }
+        // var date = new Date(year, month, day);
+        if(month<10){
+            var date = year + '-0' + month + '-' + day;
+        }
+        var date = year + '-' + month + '-' + day;
+
+        window.location.href = base_url+'/monthlypayroll/index/term/'+date;
+
+
+    }
+
+    function this_month(){
+        var date = new Date().toISOString().slice(0,10);
+        window.location.href = base_url+'/monthlypayroll/index/term/'+date;
+    }
+
+    function decrease_month(){
+        var term = $('#term').val();
+        var term_arr = term.split('-');
+        var year = term_arr[0];
+        var month = term_arr[1];
+        var day = term_arr[2];
+
+        month = Number(month) - 1;
+        if(month<=0){
+            year = Number(year) - 1;
+            month = 12;
+        }
+        // var date = new Date(year, month, day);
+        if(month<10){
+            var date = year + '-0' + month + '-' + day;
+        }
+        var date = year + '-' + month + '-' + day;
+        window.location.href = base_url+'/monthlypayroll/index/term/'+date;
+
+    }
+
     <?php if($this->statusidstring !=''){?>
 
     $('#statusid').val('<?php echo $this->statusidstring; ?>');

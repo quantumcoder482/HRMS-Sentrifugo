@@ -1,8 +1,8 @@
-<?php 
-/********************************************************************************* 
+<?php
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -21,39 +21,67 @@
 ?>
 <?php if(empty($this->empdata)){?>
     <div class="ml-alert-1-info">
-				<div class="style-1-icon info"></div>
-				<?php if($this->rowexist == 'norows'){?>
-					No data found.
-				<?php }else{?>
-						Employee inactivated.
-				<?php }?>
-	</div>
-<?php
-} else {
-?>
-<?php	
-$baseUrl = $this->serverUrl().$this->baseUrl();
-
-if(!empty($this->employeedata))
- {
- 	echo $this->employeedetails($this->employeedata,'view',$this->id); 
- } 
-?>
-
-<div class="right-block-data right-over-border"> 
-	<div id="error_message" style="display:none;"></div>
-		<div class="ml-alert-1-info m1-info-set">
-			<div class="style-1-icon info"></div>Feature will be available soon.
-		</div>	
-</div>	
-</div>
-<?php 
+        <div class="style-1-icon info"></div>
+        <?php if($this->rowexist == 'norows'){?>
+            No data found.
+        <?php }else{?>
+            Employee inactivated.
+        <?php }?>
+    </div>
+    <?php
+}
+else {
+$baseUrl = $this->serverUrl() . $this->baseUrl();
+if (count($this->messages)) { ?>
+    <div id="dispmsgempskills" class="settingssuccess">
+        <?php
+        foreach ($this->messages as $message) {
+            $flag = array();
+            $flag = array_keys($message);
+            echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+            echo $message[$flag[0]];
+            echo "</div></div>";
+        }
+        ?>
+    </div>
+<?php } ?>
+<div id="error_message" style="display:none;"></div>
+<?php if ($this->call != 'ajaxcall')    { ?>
+<?php if (!empty($this->employeedata)) {
+    echo $this->employeedetails($this->employeedata, 'edit', $this->id);
 }
 ?>
-<script type='text/javascript'>
-$(document).ready(function(){
-    $("#emp_payslips").addClass('active');
-    $("#emp_payslips").removeAttr("onclick");
+<div class="right-block-data">
+    <?php }
+    if ($this->call == 'ajaxcall') {
+        $div = '';
+        $endDiv = '';
+    } else {
+        $div = '<div id="grid_' . $this->dataArray[0]['objectname'] . '" class="all-grid-control">';
+        $endDiv = '</div>';
+    }
+    echo $div . '<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>' . $this->employeegrid($this->dataArray[0]) . $endDiv;
+    }?>
+</div>
 
-});
+?>
+<script type='text/javascript'>
+    $(document).ready(function(){
+        /* Making window responsive*/
+        var complete_width = $('.poc-ui-data-control').width();
+        $('.left-block-ui-data').css("width", "230");
+        $('.right-block-data').css("width", (complete_width-(253)));
+
+        function checkWidth() {
+            var complete_width = $('.poc-ui-data-control').width();
+            $('.left-block-ui-data').css("width", "230");
+            $('.right-block-data').css("width", (complete_width-(253)));
+        }
+        $(window).resize(function() {
+            checkWidth();
+        });
+        $("#emp_payslips").addClass('active');
+        $("#emp_payslips").removeAttr("onclick");
+
+    });
 </script>

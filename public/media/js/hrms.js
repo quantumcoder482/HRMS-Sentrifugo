@@ -1372,23 +1372,22 @@ function checkradio_child_roles_original(class_name)
     $('.'+class_name).prop('checked',true);
 }
 
-
-
 function displaydeptform(url,menuname)
 {
+	console.log(menuname)
 	$.ajax({
-		type:"post",		
+		type:"post",
 		url:base_url+'/index/checkisactivestatus',
 		dataType:'json',
 		success: function(response)
-		{  
+		{
 			if(typeof (response['result']) == 'undefined' || response['result'] == 'false' || response['result'] == '')
 			 {
 				window.location.href = base_url+'/index';
 			 }
 			else if(response['result'] == 'true')
 			{
-				var urlArr = url.split('/');   
+				var urlArr = url.split('/');
 				var baseurlArr = base_url.split('/');
 				var request_hostname = window.location.hostname;
 				var job_title = '';var country_id = ''; var country = '';var state_id = ''; var state = '';
@@ -1397,13 +1396,14 @@ function displaydeptform(url,menuname)
 				var controllername = urlArr[baseurlArr.length];
 					if(menuname == 'Employment Status'){
 					if($('#screenflag').length > 0){
-						screenflag = $('#screenflag').val(); 
-						
+						screenflag = $('#screenflag').val();
+
 						if(url.indexOf('addpopup') != -1){
-							url =url+'/screenflag/'+screenflag;		
-						}		
+							url =url+'/screenflag/'+screenflag;
+						}
 					}
-				}		
+				}
+
 				if(menuname == 'Position'){
 					jobtitle_id = $('#jobtitle_id').val();
 					if(jobtitle_id!=null && jobtitle_id.length>0){
@@ -1415,21 +1415,23 @@ function displaydeptform(url,menuname)
 						}
 					}
 					if(url.indexOf('addpopup') != -1){
-						url =url+'/jobtitleid/'+job_title;		
-					}		
+						url =url+'/jobtitleid/'+job_title;
+					}
 				}
+
+
 				if(menuname == 'State')
 				{
 					country_id = $('#country').val();
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 					{
 						country_id = $('#country_1').val();
 					}
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 					{
 						country_id = $('#countryid').val();
 					}
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 					{
 						country_id = $('#perm_country').val();
 					}
@@ -1439,8 +1441,8 @@ function displaydeptform(url,menuname)
 					}
 					if(url.indexOf('addpopup') != -1 || url.indexOf('addnewstate') != -1)
 					{
-						url =url+'/selectcountryid/'+country;		
-					}		
+						url =url+'/selectcountryid/'+country;
+					}
 				}
 				if(menuname == 'City')
 				{
@@ -1450,7 +1452,7 @@ function displaydeptform(url,menuname)
 						country_id = $('#country_1').val();
 					if(country_id == '' || typeof country_id == 'undefined')
 						country_id = $('#countryid').val();
-					if(country_id == '' || typeof country_id == 'undefined') 
+					if(country_id == '' || typeof country_id == 'undefined')
 						country_id = $('#perm_country').val();
 					if(state_id == '' || typeof state_id == 'undefined')
 						state_id = $('#state_1').val();
@@ -1466,36 +1468,36 @@ function displaydeptform(url,menuname)
 					}
 					if(url.indexOf('addpopup') != -1 || url.indexOf('addnewcity') != -1)
 					{
-						url =url+'/selectcountryid/'+country+'/selectstateid/'+state;		
-					}		
+						url =url+'/selectcountryid/'+country+'/selectstateid/'+state;
+					}
 				}
 				if(menuname == 'Candidate Details')
 				{
 					candidateid = $('#rccandidatename').val();
-					url =url+'/id/'+candidateid;	
+					url =url+'/id/'+candidateid;
 				}
-				
+
 				if(controllername =='interviewrounds')
 				{
 					var act_name = '';
-					if(url.indexOf("interviewrounds") != -1)                        
+					if(url.indexOf("interviewrounds") != -1)
 					{
 						act_name = url.match(/interviewrounds\/(.*?)\//i)[1];
-					}			
+					}
 					var deptid = '';
 					deptid = $('#deptidHidden').val();
-					if(url.indexOf('deptid') == -1)                                       
-					{						
+					if(url.indexOf('deptid') == -1)
+					{
 						if(deptid!= '' && typeof(deptid) !== 'undefined')
 						url = url+'/deptid/'+deptid;
 					}
 					var int_status = $('#hiddeninterview_status').val();
-					var round_status = $('#previousstatus').val();	
+					var round_status = $('#previousstatus').val();
 					var round_count = $('#interviewroundcount').val();
 					if(act_name == 'editpopup')
 					{
 						if(int_status == 'Completed')
-						{				
+						{
 							jAlert('As the interview process is completed, you cannot edit the record.');
 							flag = 'no';
 						}
@@ -1517,7 +1519,7 @@ function displaydeptform(url,menuname)
 						else
 						{
 										if(round_status == '' && round_count != 0)
-										{ 
+										{
 											flag = 'no';
 											jAlert('The candidate is not scheduled to the next round. So you cannot assign a new round to the candidate.');
 										}
@@ -1529,12 +1531,12 @@ function displaydeptform(url,menuname)
 					}
 					else
 					{
-						flag = 'yes';		
+						flag = 'yes';
 					}
-				}	
+				}
 					if(flag == 'yes'){
 						$("body").append('<div id="blockingdiv" class="ui-widget-overlay ui-front"></div>');
-						
+
 						var capitalizedtitle = '';
 						if(menuname !='')
 						{
@@ -1549,18 +1551,18 @@ function displaydeptform(url,menuname)
 									{
 										capitalizedtitle = "Background check process";
 									}
-						}			
+						}
 						$(".closeAttachPopup").remove();
 							window.parent.$('#'+controllername+'Container').dialog({
 																	open:function(){
 																																$('#'+controllername+'Container').css('display','block');
 						$('#'+controllername+'Cont').attr('src', url);
 																	  $(document).bind('keydown',function(e) {
-																		
+
 																		if (e.keyCode === 8) {
 																			return false;
 																		};
-																	});														  
+																	});
 																	},
 											close: function() {
 											 $('#blockingdiv').remove();
@@ -1574,7 +1576,10 @@ function displaydeptform(url,menuname)
 											});
 						$('#processesCont').contents().find('input[name="bg-check-details-id"]').val(urlsplitArr[5]);
 					}
-			}else
+
+
+			}
+			else
 			{
 				window.location.href = base_url+'/index';
 			}

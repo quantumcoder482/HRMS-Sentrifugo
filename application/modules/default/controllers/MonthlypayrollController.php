@@ -115,25 +115,47 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 
         $term = $this->_getParam('term');
         $nowDate = new Zend_date();
-
-        $term = $term?$term:$nowDate->get('YYYY-MM-dd');
-        $this->view->term = $term;
-
+        $term = $term ? date('Y-m-d',strtotime($term)):$nowDate->get('YYYY-MM-dd');
+        $term_monthlypayroll = $monthly_model->getCreatedpayrollbyMonth($term);
 
 
+        // Create new payroll
+        $newpayroll = $this->_getParam('newpayroll');
+        if($newpayroll){
+            if($term_monthlypayroll['count'] == 0){
+                $result = $monthly_model->CreateNewMonthlypayroll($loginUserId,$loginuserGroup);
+            }
+        }
 
-        $dataTmp = $monthly_model->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$loginuserGroup,$req_type,'monthlypayroll',$dashboardcall);
+        $create_monthlypayroll = "disabled";
+        if($term_monthlypayroll['count'] == 0 && $term == $nowDate->get('YYYY-MM-dd')){
+            $date_arr = explode('-', (string)$term);
+            if($date_arr[2]<='15'){
+                $create_monthlypayroll = "enabled";
+            }
+            else
+                $create_monthlypayroll = "disabled";
+        }
+
+        $export_payroll = "disabled";
+        if($term_monthlypayroll['count'] != 0){
+            $export_payroll = "enabled";
+        }
+
+
+        $dataTmp = $monthly_model->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$loginuserGroup,$req_type,'monthlypayroll',$dashboardcall, $term);
+
 
         // Each Department Employees Count
-        $opdepartments = $monthly_model->getDepartmentCount(1);
+        $opdepartments = $monthly_model->getDepartmentCount(1, $term);
         $opdepartmentcount = $opdepartments['count'];
         $this->view->op_count = $opdepartmentcount;
 
-        $nonopdepartments = $monthly_model->getDepartmentCount(2);
+        $nonopdepartments = $monthly_model->getDepartmentCount(2, $term);
         $nonopdepartmentcount = $nonopdepartments['count'];
         $this->view->nonop_count = $nonopdepartmentcount;
 
-        $admdepartments = $monthly_model->getDepartmentCount(3);
+        $admdepartments = $monthly_model->getDepartmentCount(3, $term);
         $admdepartmentcount = $admdepartments['count'];
         $this->view->adm_count = $admdepartmentcount;
 
@@ -143,12 +165,15 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
         $this->view->dataArray = $dataTmp;
         $this->view->req_type=$req_type;
         $this->view->call = $call;
+        $this->view->term = $term;
+        $this->view->create_monthlypayroll = $create_monthlypayroll;
+        $this->view->export_payroll = $export_payroll;
         $this->view->message = "this is monthly payroll page";
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
 
 	}
 
-	public function addAction()
+	public function add1Action()
 	{
 		$auth = Zend_Auth::getInstance();
 		$data = array();
@@ -190,14 +215,15 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 //            $empstatusstr = implode(",",$newarr1);
 //        }
 
-        $norec_arr['department'] = "Departments are not added yet.";
-
-        $this->view->messages = $norec_arr;
+//        $norec_arr['department'] = "Departments are not added yet.";
+//
+//        $this->view->messages = $norec_arr;
 
 
         if($this->getRequest()->getPost())
         {
             $result = $this->save($form,array());
+
             $this->view->msgarray = $result;
             $this->view->messages = $result;
         }
@@ -244,344 +270,24 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 
                 if (!empty($data)) {
 
-                    /*
-                    if($aflag == 'approver' && $data['appstatus'.$aorder] == 'Initiated')
-                    {
-                        $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
-                        $business_units_list = $requi_model->getBusinessUnitsList();
-                        $data['bunit_name'] = $business_units_list[$data['businessunit_id']];
-
-                        $departments_list = $requi_model->getDepartmentList($data['businessunit_id']);
-                        $data['dept_name'] = $departments_list[$data['department_id']];
-
-                        $job_data = $requi_model->getJobTitleList();
-                        if(isset($job_data[$data['jobtitle']])) { $data['jtitle_name'] = $job_data[$data['jobtitle']]; }
-                        else $data['jtitle_name'] = 'Select Job Title';
-
-                        $pos_data = $requi_model->getPositionOptions($data['jobtitle']);
-                        $data['position_name'] = $pos_data[$data['position_id']];
-
-                        $emptype_options = $requi_model->getStatusOptionsForRequi();
-                        if(isset($emptype_options[$data['emp_type']])) { $data['emptype_name'] = $emptype_options[$data['emp_type']]; }
-                        else $data['emptype_name'] = 'Select Employment Status';
-
-                        $report_manager_data = $user_model->getUserDataById($data['reporting_id']);
-
-                        $data['mngrname'] = $report_manager_data['userfullname'];
-                        $form->req_status->addMultiOptions(array(
-                            '0'		=>		'Select status',
-                            '2'		=>		'Approved',
-                            '3'		=> 		'Rejected'
-                            ));
-                            $form->req_status->setRequired(true)->addErrorMessage('Please select the status.');
-                            $form->req_status->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
-
-                            $elements = $form->getElements();
-                            if(count($elements)>0)
-                            {
-                                foreach($elements as $key=>$element)
-                                {
-                                    if($key!='req_status')
-                                    $element->setRequired(false);
-                                }
-                            }
-
-                            if($data['approver1'] != '')
-                            {
-                                $app1_opt = $user_model->getUserDataById($data['approver1']);
-                                $data_m['approver1'] = $app1_opt['userfullname'];
-                            }
-                            if($data['approver2'] != '')
-                            {
-                                $app2_opt = $user_model->getUserDataById($data['approver2']);
-                                $data_m['approver2'] = $app2_opt['userfullname'];
-                            }
-                            if($data['approver3'] != '')
-                            {
-                                $app3_opt = $user_model->getUserDataById($data['approver3']);
-                                $data_m['approver3'] = $app3_opt['userfullname'];
-                            }
-                        $form->recruiters->setAttrib("disabled", "disabled");
-
-                    }
-                    else
-                    {
-                        $edit_flag = 'no';
-                        if(in_array('Approved', array($data['appstatus1'],$data['appstatus2'],$data['appstatus3'])))
-                        {
-                            $edit_flag = 'yes';
-                        }
-                        if($edit_flag == 'yes')
-                        {
-                            $form->recruiters->setAttrib("disabled", "disabled");
-                            $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
-                            $business_units_list = $requi_model->getBusinessUnitsList();
-                            $data['bunit_name'] = $business_units_list[$data['businessunit_id']];
-
-                            $departments_list = $requi_model->getDepartmentList($data['businessunit_id']);
-                            $data['dept_name'] = $departments_list[$data['department_id']];
-
-                            $job_data = $requi_model->getJobTitleList();
-                            if(isset($job_data[$data['jobtitle']])) { $data['jtitle_name'] = $job_data[$data['jobtitle']]; }
-                            else $data['jtitle_name'] = 'Select Job Title';
-
-                            $pos_data = $requi_model->getPositionOptions($data['jobtitle']);
-                            $data['position_name'] = $pos_data[$data['position_id']];
-
-                            $emptype_options = $requi_model->getStatusOptionsForRequi();
-                            if(isset($emptype_options[$data['emp_type']])) { $data['emptype_name'] = $emptype_options[$data['emp_type']]; }
-                            else $data['emptype_name'] = 'Select Employment Status';
-
-                            $report_manager_data = $user_model->getUserDataById($data['reporting_id']);
-                            $data['mngrname'] = $report_manager_data['userfullname'];
-
-                            $elements = $form->getElements();
-                            if(count($elements)>0)
-                            {
-                                foreach($elements as $key=>$element)
-                                {
-                                    $element->setRequired(false);
-                                }
-                            }
-                            if($data['appstatus1'] == 'Approved')
-                            {
-                                $edit_order = 1;
-                                $app1_opt = $user_model->getUserDataById($data['approver1']);
-                                $data_m['approver1'] = $app1_opt['userfullname'];
-
-                                $report_manager_options = $requi_model->getapprovers($data['reporting_id'], $data['department_id']);
-                                $app2_options = array();
-                                foreach($report_manager_options as $app1)
-                                {
-                                    if($app1['id'] != $loginUserId && $app1['id'] != $data['approver1'])
-                                    $approver2_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                }
-
-                                $form->setDefault('approver1',$data['approver1']);
-
-                                $form->approver2->clearMultiOptions();
-                                $form->setDefault('approver2',$data['approver2']);
-
-                                if($data['approver2'] != '')
-                                {
-                                    $app3_options = array();
-                                    foreach($report_manager_options as $app1)
-                                    {
-                                        if($app1['id'] != $loginUserId && $app1['id'] != $data['approver1'] && $app1['id'] != $data['approver2'])
-                                        $approver3_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                    }
-                                    $form->approver3->clearMultiOptions();
-                                    $form->setDefault('approver3',$data['approver3']);
-                                }
-
-                            }
-                            if($data['appstatus2'] == 'Approved')
-                            {
-                                $edit_order = 2;
-                                $app2_opt = $user_model->getUserDataById($data['approver2']);
-                                $data_m['approver2'] = $app2_opt['userfullname'];
-
-                                $report_manager_options = $requi_model->getapprovers($data['reporting_id'], $data['department_id']);
-
-                                $app3_options = array();
-                                foreach($report_manager_options as $app1)
-                                {
-                                    if($app1['id'] != $loginUserId && $app1['id'] != $data['approver1'] && $app1['id'] != $data['approver2'])
-                                    $app3_options[$app1['id']] = ucwords($app1['name']);
-                                }
-
-                                $form->approver3->clearMultiOptions();
-                                $form->approver3->addMultiOptions(array(''=>'Select Approver -3')+$app3_options);
-
-                                $form->setDefault('approver3',$data['approver3']);
-                            }
-                            if($data['appstatus3'] == 'Approved')
-                            {
-                                $edit_order = 3;
-                                $app3_opt = $user_model->getUserDataById($data['approver3']);
-                                $data_m['approver3'] = $app3_opt['userfullname'];
-                            }
-
-
-                        }
-                        else
-                        {
-                            $business_units_list = $requi_model->getBusinessUnitsList();
-                            $form->business_unit->addMultiOptions(array(''=>'Select Business Unit')+$business_units_list);
-                            $form->setDefault('business_unit',$data['businessunit_id']);
-
-                            $departments_list = $requi_model->getDepartmentList($data['businessunit_id']);
-                            $form->department->addMultiOptions(array(''=>'Select Department')+$departments_list);
-                            $form->setDefault('department',$data['department_id']);
-
-                            $job_data = $requi_model->getJobTitleList();
-                            $form->jobtitle->addMultiOptions(array(''=>'Select Job Title')+$job_data);
-                            $form->setDefault('jobtitle',$data['jobtitle']);
-
-                            $pos_data = $requi_model->getPositionOptions($data['jobtitle']);
-                            $form->position_id->addMultiOptions(array(''=>'Select Position')+$pos_data);
-                            $form->setDefault('position_id',$data['position_id']);
-
-                            $emptype_options = $requi_model->getStatusOptionsForRequi();
-                            $form->emp_type->addMultiOptions(array(''=>'Select Employment Status')+$emptype_options);
-                            $form->requisition_code->setValue($data['requisition_code']);
-                            $form->setDefault('emp_type',$data['emp_type']);
-
-
-
-                            $form->req_status->addMultiOptions(array(
-                                                    '1' => 'Initiated'
-                                                    ));
-
-                                                    if($loginuserGroup == HR_GROUP || $loginuserGroup == '' || $loginuserGroup == MANAGEMENT_GROUP)
-                                                    {
-                                                        if($loginuserGroup == '')
-                                                        $reportingManagerData = $requi_model->getReportingmanagers('',$loginUserId,'',$data['department_id'],'requisition');
-                                                        else
-                                                            $reportingManagerData = $requi_model->getReportingmanagers('','','',$data['department_id'],'requisition');
-
-                                                        if(isset($_POST['business_unit']) && $_POST['business_unit']!='')
-                                                        {
-                                                            $departments_list = $requi_model->getDepartmentList($_POST['business_unit']);
-                                                            $form->department->addMultiOptions(array(''=>'Select Department')+$departments_list);
-                                                        }
-                                                        if((isset($_POST['department']) && $_POST['department']!=''))
-                                                        {
-
-                                                            $reportingManagerData = $requi_model->getReportingmanagers('',$loginUserId,'',$_POST['department'],'requisition');
-
-                                                        }
-
-                                                        $form->setDefault('reporting_id',$data['reporting_id']);
-                                                        $form->setDefault('req_status',$data['req_status']);
-                                                        $form->req_status->setAttrib("disabled", "disabled");
-                                                         if($loginuserGroup == HR_GROUP)
-                                                        {
-                                                            $departments_list = $requi_model->getDepartmentList($sess_vals->businessunit_id);
-                                                            $data_m['bunit_data']['id'] = $sess_vals->businessunit_id;
-                                                            $data_m['bunit_data']['name'] = $business_units_list[$sess_vals->businessunit_id];
-                                                            $form->department->addMultiOptions(array(''=>'Select Department')+$departments_list);
-                                                        }
-                                                    }
-                                                    else //for managers login
-                                                    {
-                                                        $report_manager_options = $user_model->getUserDataById($data['reporting_id']);
-                                                        $departments_list = $requi_model->getDepartmentList($data['businessunit_id']);
-                                                        $data_m['manager_data']['id'] = $data['reporting_id'];
-                                                        $data_m['manager_data']['name'] = $report_manager_options['userfullname'];
-                                                        $data_m['bunit_data']['id'] = $data['businessunit_id'];
-                                                        $data_m['bunit_data']['name'] = $business_units_list[$data['businessunit_id']];
-                                                        $data_m['dept_data']['id'] = $data['department_id'];
-                                                        $data_m['dept_data']['name'] = $departments_list[$data['department_id']];
-
-                                                        $form->setDefault('req_status',$data['req_status']);
-                                                        $form->req_status->setAttrib("disabled", "disabled");
-                                                    }
-                                                    //start of approvers options
-                                                    $approver_opt = $requi_model->getapprovers($data['reporting_id'], $data['department_id']);
-                                                    $app1_opt = array();
-                                                    $app2_opt = array();
-                                                    $app3_opt = array();
-                                                    if(count($approver_opt) > 0 && count($_POST) == 0)
-                                                    {
-                                                        foreach($approver_opt as $app1)
-                                                        {
-                                                            if($loginUserId !=$app1['id'])
-                                                                $approver1_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                                        }
-                                                        foreach($approver_opt as $app1)
-                                                        {
-                                                            if($loginUserId !=$app1['id'])
-                                                            {
-                                                            if($app1['id'] != $data['approver1'])
-                                                                $approver2_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                                             }
-                                                        }
-                                                        foreach($approver_opt as $app1)
-                                                        {
-                                                            if($loginUserId !=$app1['id'])
-                                                            {
-                                                            if($app1['id'] != $data['approver1'] && $app1['id'] != $data['approver2'])
-                                                                $approver3_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                                             }
-                                                        }
-                                                        if($data['approver2'] == '')
-                                                            $approver3_opt = array();
-                                                    }
-
-                                                    //end of approvers options
-                                                    foreach($data as $key=>$val)
-                                                    {
-                                                        $data[$key] = htmlentities(addslashes($val), ENT_QUOTES, "UTF-8");
-                                                    }
-                                                    $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
-                                                    $form->populate($data);
-                                                    if(isset($_POST['business_unit']) && $_POST['business_unit']!='')
-                                                    {
-                                                        $departments_list = $requi_model->getDepartmentList($_POST['business_unit']);
-                                                        $form->department->clearMultiOptions();
-                                                        $form->department->addMultiOptions(array(''=>'Select Department')+$departments_list);
-                                                    }
-                                                    if(isset($_POST['jobtitle']) && $_POST['jobtitle']!='')
-                                                    {
-                                                        $pos_data = $requi_model->getPositionOptions($_POST['jobtitle']);
-                                                        $form->position_id->clearMultiOptions();
-                                                        $form->position_id->addMultiOptions(array(''=>'Select Position')+$pos_data);
-                                                    }
-                                                    if(isset($_POST['reporting_id']) && $_POST['reporting_id'] != '')
-                                                    {
-                                                        $app1_data = $requi_model->getapprovers($_POST['reporting_id'], $_POST['department']);
-                                                        $app1_opt = array();
-                                                        if(count($app1_data) > 0)
-                                                        {
-                                                            foreach($app1_data as $app1)
-                                                            {
-                                                                $app1_opt[$app1['id']] = ucwords($app1['name']);
-                                                                $approver1_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                                            }
-                                                            $form->reporting_id->setValue($_POST['reporting_id']);
-                                                        }
-                                                    }
-                                                    if(isset($_POST['approver1']) && $_POST['approver1'] != '')
-                                                    {
-                                                        $app1_data = $requi_model->getapprovers($_POST['reporting_id'], $_POST['department']);
-                                                        $app1_opt = array();
-                                                        if(count($app1_data) > 0)
-                                                        {
-                                                            foreach($app1_data as $app1)
-                                                            {
-                                                                if($app1['id'] != $_POST['approver1'])
-                                                                $approver2_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                                            }
-                                                            $form->approver1->setValue($_POST['approver1']);
-                                                        }
-                                                    }
-                                                    if(isset($_POST['approver2']) && $_POST['approver2'] != '')
-                                                    {
-                                                        $app1_data = $requi_model->getapprovers($_POST['reporting_id'], $_POST['department']);
-                                                        $app1_opt = array();
-                                                        if(count($app1_data) > 0)
-                                                        {
-                                                            foreach($app1_data as $app1)
-                                                            {
-                                                                if($app1['id'] != $_POST['approver1'] && $app1['id'] != $_POST['approver2'])
-                                                                $approver3_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
-                                                            }
-                                                            $form->approver2->setValue($_POST['approver2']);
-                                                        }
-                                                    }
-                                                    if(isset($_POST['approver3']) && $_POST['approver3'] != '')
-                                                    {
-                                                        $form->approver3->setValue($_POST['approver3']);
-                                                    }
-                        }
-                    }//end of else of aflag.
-                    */
                     // date format convert
 
                     $data['contract_date'] = sapp_Global::change_date($data['contract_date'], 'view');
                     $data['starting_date'] = sapp_Global::change_date($data['starting_date'], 'view');
 
+                    $form->setDefault('id', $id);
+                    $form->setDefault('employee_id', $data['employee_id']);
+//                    $form->employee_id->setAttrib("disabled", "disabled");
+                    $form->setDefault('starting_date', $data['starting_date']);
+//                    $form->starting_date->setAttrib("disabled", "disabled");
+                    $form->setDefault('employee_name', $data['employee_name']);
+//                    $form->employee_name->setAttrib("disabled", "disabled");
+                    $form->setDefault('department', $data['department']);
+//                    $form->department->setAttrib("disabled", "disabled");
+                    $form->setDefault('grossbase_salary', $data['grossbase_salary']);
+//                    $form->grossbase_salary->setAttrib("disabled", "disabled");
+                    $form->setDefault('contract_date', $data['contract_date']);
+//                    $form->contract_date->setAttrib("disabled", "disabled");
                     $form->setDefault('comments',$data['comments']);
                     $form->setDefault('sick_leavedays',$data['sick_leavedays']);
                     $form->setDefault('standby_hours',$data['standby_hours']);
@@ -604,19 +310,19 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
                     $form->setDefault('whtaxpaided_salary',$data['whtaxpaided_salary']);
                     $form->setDefault('progresive_whtax',$data['progresive_whtax']);
                     $form->setDefault('bankpaid_salary',$data['bankpaid_salary']);
+                    $form->setDefault('addtax_salary',$data['addtax_salary']);
                     $form->setDefault('whtax_salary',$data['whtax_salary']);
+                    $form->setDefault('total_bankpaid_salary',$data['total_bankpaid_salary']);
 
 
-
+                    $edit_flag = "yes";
                     $this->view->loginuserGroup = $loginuserGroup;
                     $this->view->form = $form;
                     $this->view->data = $data;
-
                     $this->view->edit_flag = $edit_flag;
-                    $this->view->edit_order = $edit_order;
 
                     if ($this->getRequest()->getPost()) {
-                        $result = $this->save($form, $data);
+                        $result = $this->save($form,$data);
                         $this->view->msgarray = $result;
                         $this->view->messages = $result;
                     }
@@ -654,9 +360,10 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 			$trDb = Zend_Db_Table::getDefaultAdapter();
 			// starting transaction
 			$trDb->beginTransaction();
+
 			try
 			{
-				$id = (int)$this->_getParam('id',null);
+              	$id = (int)$this->_getParam('id',null);
 				$employee_id = $this->_getParam('employee_id',null);
                 $employee_name = $this->_getParam('employee_name',null);
 				$department = $this->_getParam('department',null);
@@ -685,9 +392,22 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
                 $whtaxpaided_salary = $this->_getParam('whtaxpaided_salary',null);
                 $progresive_whtax = $this->_getParam('progresive_whtax',null);
                 $bankpaid_salary = $this->_getParam('bankpaid_salary',null);
+                $total_bankpaid_salary = $this->_getParam('total_bankpaid_salary',null);
+                $addtax_salary = $this->_getParam('addtax_salary',null);
                 $whtax_salary = $this->_getParam('whtax_salary',null);
                 $edit_flag = $this->_getParam('edit_flag',null);
 
+
+                if($edit_flag !='' && $edit_flag=='yes'){
+
+                    $employee_id = $data['employee_id'];
+                    $employee_name = $data['employee_name'];
+                    $department = $data['department'];
+                    $starting_date = $data['starting_date'];
+                    $contract_date = $data['contract_date'];
+                    $grossbase_salary = $data['grossbase_salary'];
+
+                }
 
                 $data = array(
                     'employee_id' 	    =>	trim($employee_id),
@@ -718,6 +438,8 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
                     'whtaxpaided_salary' 	    => 	trim($whtaxpaided_salary),
                     'progresive_whtax' 	        => 	trim($progresive_whtax),
                     'bankpaid_salary' 	        => 	trim($bankpaid_salary),
+                    'total_bankpaid_salary' 	=> 	trim($total_bankpaid_salary),
+                    'addtax_salary'             =>  trim($addtax_salary),
                     'whtax_salary' 	            => 	trim($whtax_salary),
                     'createdby' 		        => 	trim($loginUserId),
                     'modifiedby' 		        => 	trim($loginUserId),
@@ -726,13 +448,13 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 
                 );
 					
-                if($edit_flag!='' && $edit_flag == 'yes')
-                {
-                    $data = array(
-                          'modifiedby' => trim($loginUserId),
-                          'modifiedon' => gmdate("Y-m-d H:i:s"),
-                    );
-                }
+//                if($edit_flag!='' && $edit_flag == 'yes')
+//                {
+//                    $data = array(
+//                          'modifiedby' => trim($loginUserId),
+//                          'modifiedon' => gmdate("Y-m-d H:i:s"),
+//                    );
+//                }
 
 				$where = "";
 				if($id != '')
@@ -742,6 +464,8 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 					$where = "id = ".$id;
 
 				}
+
+
 
 				$result = $monthlypayroll_model->SaveorUpdateMonthlypayrollData($data, $where);
 
@@ -778,50 +502,1109 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 		}
 	}
 
+    public function payslipAction()
+    {
 
+        $term = $this->_getParam('term',null);
+
+        $auth = Zend_Auth::getInstance();
+        if($auth->hasIdentity()){
+            $loginUserId = $auth->getStorage()->read()->id;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        }
+
+        $month_string = array(
+            '01'=>'January','02'=>'February','03'=>'March','04'=>'April','05'=>'May','06'=>'June','07'=>'July','08'=>'August','09'=>'September','10'=>'October','11'=>'November','12'=>'December'
+        );
+
+
+        // Data filtering option
+        $sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'ASC';
+        $by = ($this->_getParam('by')!='')? $this->_getParam('by'):'r.id';
+        $searchQuery = "";
+        $userid = null;
+        $usergroup = null;
+
+
+        $this->_helper->layout->disableLayout();
+        $sort_name = $this->_getParam('sort_name',null);
+        $sort_type = $this->_getParam('sort_type',null);
+
+
+        $payroll_model = new Default_Model_Monthlypayroll();
+
+
+        $req_type = 4; // department: ALL 4
+        $payroll_data_req = $payroll_model->getMonthlypayrollexportData($sort, $by, $searchQuery, $userid, $usergroup, $req_type, $term,$searchQuery);
+
+        $date_arr = explode('-',$term);
+        $period = $month_string[$date_arr[1]]." ".$date_arr['0'];
+
+        $date = sapp_Global::change_date($term,'');
+
+
+
+        /*
+         * Payslip publish
+         */
+
+        $org_model = new Default_Model_Organisationinfo();
+        $org_logo = $org_model->getOrgLogo();
+        $org_data = $org_model->getOrganisationInfo();
+        $org_name = $org_data[0]['organisationname'];
+
+
+
+
+        require_once('FPDF/fpdf.php');
+        defined('FPDF_FONTPATH') || define('FPDF_FONTPATH', 'FPDF/font');
+
+
+
+        if($payroll_data_req){
+            foreach($payroll_data_req as $data){
+
+                $emp_id = $data['employee_id'];
+                $empbankdata = $payroll_model->getEmpBankData($emp_id);
+
+                $bankname = "";
+                $accountnumber = "";
+                if($empbankdata['bankname']){
+                    $bankname = $empbankdata['bankname'];
+                }
+                if($empbankdata['accountnumber']){
+                    $accountnumber = $empbankdata['accountnumber'];
+                }
+                $user_id = $empbankdata['user_id'];
+
+
+                $pdf=new FPDF('P','mm');
+
+                $pdf->AliasNbPages();
+                $pdf->SetAutoPageBreak(false);
+                $pdf->AddPage();
+
+                $pdf->SetLeftMargin(8);
+                $pdf->SetrightMargin(8);
+
+                // logo size is 280X200
+                $logo_path = BASE_PATH.'/uploads/organisation/'.$org_logo['org_image'];
+                $pdf->Image($logo_path,10,10,21,15);
+
+                $pdf->SetFont('Arial','B',13);
+                $pdf->SetY(10);
+                $pdf->SetX(32);
+                $pdf->Cell(0,10,$org_name,0,0,'L');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetX(143);
+                $pdf->Cell(0,8,'Page',0,0,'L');
+
+                $pdf->SetX(160);
+                $pdf->Cell(0,8,'1',0,0,'L');
+
+                $pdf->SetX(175);
+                $pdf->Cell(0,8,'to',0,0,'L');
+
+                $pdf->SetX(190);
+                $pdf->Cell(0,8,'1',0,0,'L');
+
+                $pdf->SetFont('Arial','B',13);
+                $pdf->SetY(18);
+                $pdf->SetX(32);
+                $pdf->Cell(0,8,'L71513046P',0,0,'L');
+
+                $pdf->SetY(28);
+                $pdf->Cell(0,8,'Payslip Form',0,0,'C');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetY(35);
+                $pdf->SetX(8);
+                $pdf->Cell(0,8,'Period',0,0,'L');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->SetX(30);
+                $pdf->Cell(0,8,$period,0,0,'L');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetX(145);
+                $pdf->Cell(0,8,'Date',0,0,'L');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->Cell(0,8,$date,0,0,'R');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetY(43);
+                $pdf->SetX(8);
+                $pdf->Cell(0,8,'Employee',0,0,'L');
+
+                $pdf->SetFont('Arial','B',13);
+                $pdf->SetX(30);
+                $pdf->Cell(0,8,$data['employee_name'],0,0,'L');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetX(133);
+                $pdf->Cell(0,8,'Gross Base Salary',0,0,'L');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->Cell(0,8,number_format($data['grossbase_salary']).' ALL',0,0,'R');
+
+                // Dash - - - - - - - - - - -
+                $pdf->SetLineWidth(0.5);
+                $pdf->SetDrawColor(128,128,128);
+                for($i=8;$i<=202;$i+=4){
+                    $pdf->Line($i,55,$i+2,55);
+                }
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetY(55);
+                $pdf->SetX(8);
+                $pdf->Cell(0,8,'Job Title',0,0,'L');
+
+//                if($data['shiftpayroll'] == 1){
+//                    $pdf->SetFont('Arial','B',10);
+//                    $pdf->SetX(30);
+//                    $pdf->Cell(0,8,'Shift',0,0,'L');
+//                }
+
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetX(145);
+                $pdf->Cell(0,8,'Bank',0,0,'L');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->Cell(0,8,$bankname,0,0,'R');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetY(62);
+                $pdf->SetX(140);
+                $pdf->Cell(0,8,'Account',0,0,'L');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->Cell(0,8,$accountnumber,0,0,'R');
+
+
+
+                // table start $x1=8 $y1=70 step +8  x2=202
+                $x1=8; $x2=150; $x3=202; $y=70;$step=8;$w=194;
+
+                //$pdf->SetDrawColor();
+                //$pdf->SetTextColor();
+
+                /*
+                 * Payment
+                 */
+
+                $pdf->SetFillColor(220,220,220);
+                $pdf->Rect($x1,$y,$w,$step,'F');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'1      Payment',0,0,'L');
+
+                $y+=$step;
+
+                $pdf->SetFillColor(50,50,50);
+                $pdf->Rect($x1,$y,$w,$step,'F');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetTextColor(240,240,240);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'Descriptiion',0,0,'L');
+
+                $pdf->SetX($x1);
+                $pdf->Cell($x2,8,'Quantity',0,0,'R');
+
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'Value',0,0,'R');
+
+                $y+=$step;
+
+
+                $payment_total = 0;
+                $grossbase_salary = $data['grossbase_salary'];
+
+
+                // Overtime hours
+                if($data['overtime_hours'] != 0){
+                    $overtimesalary = round($data['overtime_hours']*($grossbase_salary/21/8)*0.25);
+                    $payment_total += $overtimesalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Overtime',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,$data['overtime_hours'],0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($overtimesalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+
+                }
+
+                // Addition Role Position
+
+                if($data['addition_rollposition'] != 0){
+                    $addrollpositionsalary = round($data['addition_rollposition']);
+                    $payment_total += $addrollpositionsalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Additon Roll',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,'',0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($addrollpositionsalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+
+                }
+
+                // Weekend National Days
+
+                if($data['weekend_nationaldays'] != 0){
+                    $weekend_nationalsalary = round($data['weekend_nationaldays']*4500);
+                    $payment_total += $weekend_nationalsalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Weekend/National Day',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,number_format($data['weekend_nationaldays']),0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($weekend_nationalsalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+
+                }
+
+
+                //Daily Allowance
+
+                if($data['daily_allowance']){
+                    $daily_allowancesalary = $data['daily_allowance']*400;
+                    $payment_total += $daily_allowancesalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Daily Allowance',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,$data['daily_allowance'],0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($daily_allowancesalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+                }
+
+
+                // Sick Leave Days
+
+                if($data['sick_leavedays'] != 0){
+
+                    $sickleavesalary =  (-1)*round(($grossbase_salary/21)*$data['sick_leavedays']*0.2);
+                    $payment_total += $sickleavesalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Sick/Leave Days',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,$data['sick_leavedays'],0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($sickleavesalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+                }
+
+                // Standby Hours
+
+                if($data['standby_hours'] != 0){
+
+                    $standbysalary = (-1)*round($data['standby_hours']*120);
+                    $payment_total += $standbysalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Standby Hours',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,$data['standby_hours'],0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($standbysalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+                }
+
+
+                // Addition Deduct Salary
+
+                if($data['deductadd_salary'] != 0){
+
+                    $deductaddsalary = $data['deductadd_salary'];
+                    $payment_total += $deductaddsalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Added Salary',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,'',0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($deductaddsalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+                }
+
+
+                // Work Days
+
+                if($data['work_days'] != 21){
+
+                    $restworkdays = $data['work_days'] - 21;
+                    $restworkdaysalary = ($grossbase_salary + $payment_total)/21*$restworkdays;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Workdays',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,'21'.'('.$restworkdays.')',0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($restworkdaysalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+                }
+
+
+
+                // Total
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetTextColor(10,10,10);
+                $pdf->SetY($y);
+
+                $pdf->SetX($x1);
+                $pdf->Cell($x2,8,'Total',0,0,'R');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,number_format(($grossbase_salary + $payment_total)/21*$data['work_days']),0,0,'R');
+                $y+=$step;
+
+
+                /*
+                 * Insurance
+                 */
+
+                $insurance_total = 0;
+
+
+                $pdf->SetFillColor(220,220,220);
+                $pdf->Rect($x1,$y,$w,$step,'F');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'2      Insurance and TAP',0,0,'L');
+
+                $y+=$step;
+
+                $pdf->SetFillColor(50,50,50);
+                $pdf->Rect($x1,$y,$w,$step,'F');
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetTextColor(240,240,240);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'Descriptiion',0,0,'L');
+
+                $pdf->SetX($x1);
+                $pdf->Cell($x2,8,'Quantity',0,0,'R');
+
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'Value',0,0,'R');
+
+                $y+=$step;
+
+
+                //Tap total
+
+                $insurance_total += $data['progresive_whtax'];
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetTextColor(10,10,10);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'TAP total',0,0,'L');
+
+                $pdf->SetX($x1);
+                $pdf->Cell($x2,8,'',0,0,'R');
+
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,number_format(-1*$data['progresive_whtax']),0,0,'R');
+                $y+=$step;
+
+                $pdf->Line($x1,$y,$x3,$y);
+
+
+                // Social Insurance Employee
+
+                $insurance_total += $data['employeesocial_insurance'];
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetTextColor(10,10,10);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'Social Insurance Employee',0,0,'L');
+
+                $pdf->SetX($x1);
+                $pdf->Cell($x2,8,'',0,0,'R');
+
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,number_format(-1*$data['employeesocial_insurance']),0,0,'R');
+                $y+=$step;
+
+                $pdf->Line($x1,$y,$x3,$y);
+
+
+                // Health Insurnace Employee
+
+                $insurance_total += $data['employeehealth_insurance'];
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetTextColor(10,10,10);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'Health Insurance Employee',0,0,'L');
+
+                $pdf->SetX($x1);
+                $pdf->Cell($x2,8,'',0,0,'R');
+
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,number_format(-1*$data['employeehealth_insurance']),0,0,'R');
+                $y+=$step;
+
+                $pdf->Line($x1,$y,$x3,$y);
+
+
+                // Social Insurance Employer
+
+//                $insurance_total += $data['employersocial_insurance'];
+//
+//                $pdf->SetFont('Arial','',10);
+//                $pdf->SetTextColor(10,10,10);
+//                $pdf->SetY($y);
+//                $pdf->SetX($x1);
+//                $pdf->Cell(0,8,'Social Insurance Employer',0,0,'L');
+//
+//                $pdf->SetX($x1);
+//                $pdf->Cell($x2,8,'',0,0,'R');
+//
+//                $pdf->SetX($x1);
+//                $pdf->Cell(0,8,number_format(-1*$data['employersocial_insurance']),0,0,'R');
+//                $y+=$step;
+//
+//                $pdf->Line($x1,$y,$x3,$y);
+
+
+                // Health Insurance Employer
+
+//                $insurance_total += $data['employerhealth_insurance'];
+//
+//                $pdf->SetFont('Arial','',10);
+//                $pdf->SetTextColor(10,10,10);
+//                $pdf->SetY($y);
+//                $pdf->SetX($x1);
+//                $pdf->Cell(0,8,'Health Insurance Employer',0,0,'L');
+//
+//                $pdf->SetX($x1);
+//                $pdf->Cell($x2,8,'',0,0,'R');
+//
+//                $pdf->SetX($x1);
+//                $pdf->Cell(0,8,number_format(-1*$data['employerhealth_insurance']),0,0,'R');
+//                $y+=$step;
+//
+//                $pdf->Line($x1,$y,$x3,$y);
+
+
+                // Add Tax Salary
+
+                if($data['addtax_salary']){
+                    $addtaxsalary = $data['addtax_salary'];
+                    $insurance_total -= $addtaxsalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Added Tax Salary',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,'',0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format($addtaxsalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+
+                }
+
+
+                // Deduct Tax Salary
+
+                if($data['whtax_salary']){
+                    $whtaxsalary = $data['whtax_salary'];
+                    $insurance_total += $whtaxsalary;
+
+                    $pdf->SetFont('Arial','',10);
+                    $pdf->SetTextColor(10,10,10);
+                    $pdf->SetY($y);
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,'Withhold Tax Salary',0,0,'L');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell($x2,8,'',0,0,'R');
+
+                    $pdf->SetX($x1);
+                    $pdf->Cell(0,8,number_format(-1*$whtaxsalary),0,0,'R');
+                    $y+=$step;
+
+                    $pdf->Line($x1,$y,$x3,$y);
+
+                }
+
+
+                // Total
+                $pdf->SetFont('Arial','',10);
+                $pdf->SetTextColor(10,10,10);
+                $pdf->SetY($y);
+
+                $pdf->SetX($x1);
+                $pdf->Cell($x2,8,'Total',0,0,'R');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,number_format(-1*$insurance_total),0,0,'R');
+                $y+=$step;
+
+
+                /*
+                 * Salary net
+                 */
+                $pdf->SetFillColor(220,220,220);
+                $pdf->Rect($x1,$y,$x2,$step,'F');
+
+                $pdf->SetFillColor(50,50,50);
+                $pdf->Rect($x2+8,$y,$x3-$x2-8,$step,'F');
+
+                $pdf->SetFont('Arial','B',10);
+                $pdf->SetTextColor(10,10,10);
+                $pdf->SetY($y);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,'Salary net',0,0,'L');
+
+                $pdf->SetTextColor(240,240,240);
+                $pdf->SetX($x1);
+                $pdf->Cell(0,8,number_format($data['total_bankpaid_salary']),0,0,'R');
+
+
+
+                $file = BASE_PATH.'/downloads/payslips/'.strtolower($data['employee_id']).'_'.$date_arr[0].'_'.$date_arr[1].'.pdf';
+                if(File_exists($file)){
+                    unlink($file);
+                }
+
+                $pdf->Output($file,'F');
+
+                /*
+                 *  payslip database insert
+                 */
+
+                $payslip_data = array(
+                    'user_id' => $user_id,
+                    'period' => $period,
+                    'date' => $term,
+                    'bankname' => $bankname,
+                    'accountnumber' => $accountnumber,
+                    'salary_net' => $data['total_bankpaid_salary'],
+                    'filename' => strtolower($data['employee_id']).'_'.$date_arr[0].'_'.$date_arr[1].'.pdf'
+                );
+                $payslip_model = new Default_Model_Emppayslips;
+                $payslip_result = $payslip_model->addUpdatePayslip($payslip_data);
+
+
+//                $payslip_download = sapp_Global::downloadFile($file);
+
+            }
+        }
+
+//        $file_name = $this->_getParam('file_name', NULL);
+//        if(!empty($file_name)){
+//            $file = BASE_PATH.'/downloads/reports/'.$this->_getParam('file_name');
+//        }
+
+
+        $this->_redirect('/monthlypayroll');
+
+
+    }
+
+    public function getexcelexportAction()
+    {
+
+        $term = $this->_getParam('term',null);
+
+
+        $auth = Zend_Auth::getInstance();
+        if($auth->hasIdentity()){
+            $loginUserId = $auth->getStorage()->read()->id;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        }
+
+        $month_string = array(
+            '01'=>'January','02'=>'February','03'=>'March','04'=>'April','05'=>'May','06'=>'June','07'=>'July','08'=>'August','09'=>'September','10'=>'October','11'=>'November','12'=>'December'
+        );
+
+
+
+        // Data filtering option
+        $sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'ASC';
+        $by = ($this->_getParam('by')!='')? $this->_getParam('by'):'r.id';
+        $searchQuery = "";
+        $userid = null;
+        $usergroup = null;
+
+
+        $this->_helper->layout->disableLayout();
+        $sort_name = $this->_getParam('sort_name',null);
+        $sort_type = $this->_getParam('sort_type',null);
+
+        $cols_param_arr1 = array('','','','','','','','','','','','','','',
+            'deduction/adds from gross salary',
+            'Gross Salary',
+            'Date of Contract',
+            'Work Days',
+            'Monthly Gross Salary for days worked',
+            'The salary on which the contributions are calculated',
+            'Employee social insurance',
+            'Employee healthy insurance',
+            'Total of employee insurance',
+            'Employer social insurance',
+            'Employer health insurance',
+            'Total of employer insurance',
+            'The salary on which the withholding taxes are calculated',
+            'Progresive withholding tax',
+            'Net All salary to b paid through bank account',
+            'Adds to New Salary',
+            'Withhold from Net Salary',
+            'Total Net Salary',
+            '','',
+        );
+        $cols_param_arr2 = array(
+            'index'             =>'No',
+            'employee_id'       =>'AMD Employee unique number',
+            'starting_date'     =>'Starting date at AMD',
+            'employee_name'     =>'First_Name Last_ name',
+            'department'        =>'DEP',
+            'comments'          =>'Coments',
+            'grossbase_salary'  =>'Gross Base Salary',
+            'sick_leavedays'    =>'sick leave in days',
+            'standby_hours'     =>'standby in hours',
+            'overtime_hours'        =>'Overtime in hours',
+            'addition_roleposition'     =>'Additional Role/Position',
+            'weekend_nationaldays'      =>'weekend/national holidays',
+            'annual_leavedays'          =>'Annual leave days',
+            'daily_allowance'           =>'Daily allowance',
+            'deductadd_salary'          =>'Additional/deductions from gross salary',
+            'gross_salary'              =>'Paga bruto per muajin',
+            'contact_date'              =>'Date hyrje',
+            'work_days'                 =>'Dite pune',
+            'monthlygross_salary'       =>'Paga Bruto per dite pune,Paga mbi te cilen llog kontributet',
+            'contribution_salary'       =>'Paga mbi te cilen llog kontributet',
+            'employeesocial_insurance'  =>'Sigurimet punemarresi 9,50%',
+            'employeehealth_insurance'  =>'Sigurimet shendetesore 1,70%',
+            'employeetotal_insurance'   =>'Totali I punemarresit 11,2%',
+            'employersocial_insurance'  =>'Sigurimet e punedhenesit 15%',
+            'employerhealth_insurance'  =>'Sigurimet shendetesore 1,70%',
+            'employertotal_insurance'   =>'Totali I punedhenesit 16,70%',
+            'whtaxpaided_salary'        =>'Paga para TAP',
+            'progressive _whtax'        =>'TAP Progresiv',
+            'bankpaid_salary'           =>'Paga me Banke ne leke',
+            'addtax_salary'             =>'Shton pagën neto',
+            'whtax_salary'              =>'Ndalesa nga paga neto',
+            'total_bankpaid_salary'     =>'Paga me Banke ne leke',
+            'check'                     =>'Check',
+            'remark'                    =>'Remarks'
+        );
+
+
+
+        //$cols_param_arr = array('group_name' => 'Group','rolename' => 'Role','user_cnt' => 'Users count');
+        $payroll_model = new Default_Model_Monthlypayroll();
+
+
+        $req_type = 1; // department: OP
+        $payroll_data_req1 = $payroll_model->getMonthlypayrollexportData($sort, $by, $searchQuery, $userid, $usergroup, $req_type, $term,$searchQuery);
+
+        $req_type = 2; // department: NON-OP
+        $payroll_data_req2 = $payroll_model->getMonthlypayrollexportData($sort, $by, $searchQuery, $userid, $usergroup, $req_type, $term,$searchQuery);
+
+        $req_type = 3; // department: ADM
+        $payroll_data_req3 = $payroll_model->getMonthlypayrollexportData($sort, $by, $searchQuery, $userid, $usergroup, $req_type, $term,$searchQuery);
+
+
+
+        // Excel Export
+
+        require_once 'Classes/PHPExcel.php';
+        require_once 'Classes/PHPExcel/IOFactory.php';
+        $objPHPExcel = new PHPExcel();
+
+
+        $letters = range('A','Z');
+
+        $push_letters = range('A','Z');
+        foreach($push_letters as $letter) {
+            $letters[] = 'A'.$letter;
+        }
+
+        $term_arr = explode('-',$term);
+
+
+        $filename = "monthlypayroll (".$term_arr[0].'-'.$term_arr[1].").xlsx";
+        $count =0;
+        $unique_id = 0;
+        $op_count = 0;
+        $nonop_count = 0;
+        $adm_count = 0;
+        $cell_name="";
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension($letters[$count])->setWidth(60);
+
+        foreach ($cols_param_arr1 as $names)
+        {
+            $i = 1;
+            $cell_name = $letters[$count].$i;
+            $names = html_entity_decode($names,ENT_QUOTES,'UTF-8');
+
+            $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $names);
+            // Make bold cells
+            $objPHPExcel->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle($cell_name)->applyFromArray( array(
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '82CAFF')
+                    )
+                )
+            );
+            $objPHPExcel->getActiveSheet()->getColumnDimension($letters[$count])->setAutoSize(true);
+
+            $i++;
+            $count++;
+        }
+
+        $count =0;
+        foreach ($cols_param_arr2 as $names)
+        {
+            $i = 2;
+            $cell_name = $letters[$count].$i;
+            $names = html_entity_decode($names,ENT_QUOTES,'UTF-8');
+
+            $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $names);
+            // Make bold cells
+            $objPHPExcel->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle($cell_name)->applyFromArray( array(
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '82CAFF')
+                    )
+                )
+            );
+            $objPHPExcel->getActiveSheet()->getColumnDimension($letters[$count])->setAutoSize(true);
+
+            $i++;
+            $count++;
+        }
+
+
+        // Display field/column values in Excel.
+
+        $i = 3;
+        foreach($payroll_data_req1 as $data)
+        {
+            $count1 =0;
+            $unique_id++;
+            $op_count++;
+            foreach ($cols_param_arr2 as $column_key => $column_name)
+            {
+                // display field/column values
+                $cell_name = $letters[$count1].$i;
+                if ($column_key == 'index'){
+                    $value = $unique_id;
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                } elseif ($column_key == 'check'){
+                    $value = $unique_id;
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                } else {
+                    $value = isset($data[$column_key])?(trim($data[$column_key]) == ''?" ":$data[$column_key]):" ";
+                    $value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                }
+
+                $count1++;
+            }
+            $i++;
+        }
+
+
+        $count1 = 0;
+        foreach ($cols_param_arr2 as $column_key => $column_name)
+        {
+            // display field/column values
+            $cell_name = $letters[$count1].$i;
+            if($column_key == 'index'){
+                $cell_name = "A".$i;
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, "Total");
+            } else if($column_key != 'employee_id' && $column_key != 'starting_date' && $column_key != 'employee_name' && $column_key != 'department'&& $column_key != 'comments' && $column_key != 'contract_date' && $column_key != 'check' && $column_key != 'remark' ){
+
+                $value = "=SUM(".$letters[$count1].($i-$unique_id).':'.$letters[$count1].($i-1).")";
+
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+            }
+
+            $count1++;
+        }
+
+        $i++;
+        $cell_name = "A".$i;
+        $merge_cell_arange = $cell_name.':AC'.$i;
+        $objPHPExcel->getActiveSheet()->mergeCells($merge_cell_arange);
+        $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, " ");
+        $i++;
+
+        $cell_name = "A".$i;
+        $merge_cell_arange = $cell_name.':AC'.$i;
+        $objPHPExcel->getActiveSheet()->mergeCells($merge_cell_arange);
+        $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, "NON-OP  ".$month_string[$term_arr[1]]." Payroll");
+        $objPHPExcel->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle($cell_name)->applyFromArray( array(
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '82CAFF')
+                )
+            )
+        );
+        $i++;
+
+        foreach($payroll_data_req2 as $data)
+        {
+            $count1 =0;
+            $unique_id++;
+            $nonop_count++;
+            foreach ($cols_param_arr2 as $column_key => $column_name)
+            {
+                // display field/column values
+                $cell_name = $letters[$count1].$i;
+                if($column_key == 'index'){
+                    $value = $unique_id;
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                } elseif ($column_key == 'check'){
+                    $value = $unique_id;
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                } else {
+                    $value = isset($data[$column_key])?(trim($data[$column_key]) == ''?" ":$data[$column_key]):" ";
+                    $value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                }
+
+                $count1++;
+            }
+            $i++;
+        }
+
+
+        $count1 = 0;
+        foreach ($cols_param_arr2 as $column_key => $column_name)
+        {
+            // display field/column values
+            $cell_name = $letters[$count1].$i;
+            if($column_key == 'index'){
+                $cell_name = "A".$i;
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, "Total");
+            } elseif ($column_key == 'check'){
+                $value = $unique_id;
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+            } else if($column_key != 'employee_id' && $column_key != 'starting_date' && $column_key != 'employee_name' && $column_key != 'department'&& $column_key != 'comments' && $column_key != 'contract_date' && $column_key != 'check' && $column_key != 'remark' ){
+
+                $value = "=SUM(".$letters[$count1].($i-$nonop_count).':'.$letters[$count1].($i-1).")";
+
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+            }
+
+            $count1++;
+        }
+
+        $i++;
+        $cell_name = "A".$i;
+        $merge_cell_arange = $cell_name.':AC'.$i;
+        $objPHPExcel->getActiveSheet()->mergeCells($merge_cell_arange);
+        $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, " ");
+        $i++;
+
+        $cell_name = "A".$i;
+        $merge_cell_arange = $cell_name.':AC'.$i;
+        $objPHPExcel->getActiveSheet()->mergeCells($merge_cell_arange);
+        $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, "ADM  ".$month_string[$term_arr[1]]." Payroll");
+        $objPHPExcel->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle($cell_name)->applyFromArray( array(
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'color' => array('rgb' => '82CAFF')
+                )
+            )
+        );
+        $i++;
+
+        foreach($payroll_data_req3 as $data)
+        {
+            $count1 =0;
+            $unique_id++;
+            $adm_count++;
+            foreach ($cols_param_arr2 as $column_key => $column_name)
+            {
+                // display field/column values
+                $cell_name = $letters[$count1].$i;
+                if($column_key == 'index'){
+                    $value = $unique_id;
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                } elseif ($column_key == 'check'){
+                    $value = $unique_id;
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                } else {
+                    $value = isset($data[$column_key])?(trim($data[$column_key]) == ''?" ":$data[$column_key]):" ";
+                    $value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
+                    $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+                }
+
+                $count1++;
+            }
+            $i++;
+        }
+
+
+        $count1 = 0;
+        foreach ($cols_param_arr2 as $column_key => $column_name)
+        {
+            // display field/column values
+            $cell_name = $letters[$count1].$i;
+            if($column_key == 'index'){
+                $cell_name = "A".$i;
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, "Total");
+            } else if($column_key != 'employee_id' && $column_key != 'starting_date' && $column_key != 'employee_name' && $column_key != 'department'&& $column_key != 'comments' && $column_key != 'contract_date' && $column_key != 'check' && $column_key != 'remark' ){
+
+                $value = "=SUM(".$letters[$count1].($i-$adm_count).':'.$letters[$count1].($i-1).")";
+
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+            }
+
+            $count1++;
+        }
+
+
+        $i++;
+        $cell_name = "A".$i;
+        $merge_cell_arange = $cell_name.':AC'.$i;
+        $objPHPExcel->getActiveSheet()->mergeCells($merge_cell_arange);
+        $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, " ");
+        $i++;
+
+        $count1 = 0;
+        foreach ($cols_param_arr2 as $column_key => $column_name)
+        {
+            // display field/column values
+            $cell_name = $letters[$count1].$i;
+            if($column_key == 'index'){
+                $cell_name = "A".$i;
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, "General Total");
+
+            } else if($column_key != 'employee_id' && $column_key != 'starting_date' && $column_key != 'employee_name' && $column_key != 'department'&& $column_key != 'comments' && $column_key != 'contract_date' && $column_key != 'check' && $column_key != 'remark' ){
+
+                $value = "=SUM(".$letters[$count1].'3:'.$letters[$count1].($i-1).")/2";
+
+                $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+
+            }
+            $objPHPExcel->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle($cell_name)->applyFromArray( array(
+                    'fill' => array(
+                        'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '82CAFF')
+                    )
+                )
+            );
+            $count1++;
+        }
+
+
+
+        sapp_Global::clean_output_buffer();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header('Cache-Control: max-age=0');
+        sapp_Global::clean_output_buffer();
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+
+        $this->_redirect('');
+
+
+    }
 
 	public function viewhrAction()
 	{
 		$this->view->message = 'This is view resource requisition action page';
 	}
 
-	public function approverequisitionAction()
-	{
-		$req_model = new Default_Model_Requisition();
-		$req_data = $req_model->getReqCodes('Initiated');
-		$auth = Zend_Auth::getInstance();
-		if($auth->hasIdentity())
-		{
-			$loginUserId = $auth->getStorage()->read()->id;
-		}
-		if(isset($_POST['btnsubmit']))
-		{
-			$menumodel = new Default_Model_Menu();
-			$data = array(
-                'req_status' => $_POST['sel_app_status'],
-                'modifiedby' => $loginUserId,
-                'modifiedon' => gmdate("Y-m-d H:i:s"),
-			);
-			$where = "id = ".$_POST['sel_req_code'];
-			$req_model->SaveorUpdateRequisitionData($data, $where);
-			$actionflag = 2;
-			$objidArr = $menumodel->getMenuObjID('/roles');
-			$objID = $objidArr[0]['id'];
-			sapp_Global::logManager($objID,$actionflag,$loginUserId,$_POST['sel_req_code']);
-		}
-
-		$this->view->req_data = $req_data;
-	}
-
-	public function addcandidateAction()
-	{
-		$this->view->message = 'This is add candidate page';
-	}
-
-	public function interviewAction()
-	{
-		$this->view->message = 'This is interview page';
-	}
 
 	/**
 	 * This function is used for ajax call to get departments based on
@@ -846,6 +1629,7 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 				$options_data .= sapp_Global::selectOptionBuilder($dept['id'], $dept['deptname']);
 			}
 		}
+
 		$this->_helper->json(array('options'=>$options_data));
 	}
 
@@ -1097,34 +1881,26 @@ class Default_MonthlypayrollController extends Zend_Controller_Action
 		$id = $this->_request->getParam('objid');
 		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = '';
-		$actionflag = 3;
 		if($id)
 		{
-			$requi_model = new Default_Model_Requisition();
-			$data = array('isactive'=>0,'modifiedon' => gmdate("Y-m-d H:i:s"));
-			$where = array('id=?'=>$id);
-			$req_status = $requi_model->getRequisitionForEdit($id, $loginUserId);
+			$monlthlypayroll_model = new Default_Model_Monthlypayroll();
 
-			if($req_status['aflag'] == 'creator')
-			$Id = $requi_model->SaveorUpdateRequisitionData($data, $where);
-			else
-			$Id = "not deleted";
-			if($Id == 'update')
+            $result = $monlthlypayroll_model->DeletePayrollData($id);
+
+			if($result == 'success')
 			{
-				$menuID = REQUISITION;
-				sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-				$messages['message'] = 'Requisition deleted successfully.';
+				$messages['message'] = 'Monthlypayroll deleted successfully.';
 				$messages['msgtype'] = 'success';
 				$messages['flagtype']='process';
 			}
 			else{
-				$messages['message'] = 'Requisition cannot be deleted.';
+				$messages['message'] = 'Monthlypayroll cannot be deleted.';
 				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
-			$messages['message'] = 'Requisition cannot be deleted.';
+			$messages['message'] = 'Monlthlypayroll cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
 		if($deleteflag==1)

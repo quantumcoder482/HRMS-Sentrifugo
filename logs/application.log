@@ -10255,4 +10255,375 @@ Stack trace:
   'controller' => 'monthlypayroll',
   'action' => 'index',
   'module' => 'default',
-)
+)29.11.2018 at 02:19 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'r.create_date <= 2029-11-15)' at line 1' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#4 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(842): Zend_Db_Adapter_Pdo_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#5 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(257): Zend_Db_Adapter_Abstract->fetchRow(Object(Zend_Db_Table_Select))
+#6 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(120): Default_Model_Monthlypayroll->getCreatedpayrollbyMonth('2018-11-29')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#9 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#10 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#11 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#12 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#13 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'r.create_date <= 2029-11-15)' at line 1' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(842): Zend_Db_Adapter_Pdo_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(257): Zend_Db_Adapter_Abstract->fetchRow(Object(Zend_Db_Table_Select))
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(120): Default_Model_Monthlypayroll->getCreatedpayrollbyMonth('2018-11-29')
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}29.11.2018 at 02:19 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)29.11.2018 at 02:19 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'r.create_date <= 2029-11-15)' at line 1' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#4 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(842): Zend_Db_Adapter_Pdo_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#5 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(257): Zend_Db_Adapter_Abstract->fetchRow(Object(Zend_Db_Table_Select))
+#6 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(120): Default_Model_Monthlypayroll->getCreatedpayrollbyMonth('2018-11-29')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#9 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#10 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#11 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#12 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#13 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'r.create_date <= 2029-11-15)' at line 1' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(842): Zend_Db_Adapter_Pdo_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(257): Zend_Db_Adapter_Abstract->fetchRow(Object(Zend_Db_Table_Select))
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(120): Default_Model_Monthlypayroll->getCreatedpayrollbyMonth('2018-11-29')
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}29.11.2018 at 02:19 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)29.11.2018 at 02:22 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'r.create_date <= 2029-11-15)' at line 1' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#4 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(842): Zend_Db_Adapter_Pdo_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#5 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(257): Zend_Db_Adapter_Abstract->fetchRow(Object(Zend_Db_Table_Select))
+#6 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(120): Default_Model_Monthlypayroll->getCreatedpayrollbyMonth('2018-11-29')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#9 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#10 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#11 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#12 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#13 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'r.create_date <= 2029-11-15)' at line 1' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(842): Zend_Db_Adapter_Pdo_Abstract->query(Object(Zend_Db_Table_Select), Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(257): Zend_Db_Adapter_Abstract->fetchRow(Object(Zend_Db_Table_Select))
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(120): Default_Model_Monthlypayroll->getCreatedpayrollbyMonth('2018-11-29')
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}29.11.2018 at 02:22 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)[01-Dec-2018 00:32:16 Europe/Paris] PHP Notice:  Undefined variable: result in D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php on line 126
+[01-Dec-2018 00:32:16 Europe/Paris] PHP Stack trace:
+[01-Dec-2018 00:32:16 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[01-Dec-2018 00:32:16 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[01-Dec-2018 00:32:16 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[01-Dec-2018 00:32:16 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[01-Dec-2018 00:32:16 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[01-Dec-2018 00:32:17 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[01-Dec-2018 00:32:17 Europe/Paris] PHP   7. Default_MonthlypayrollController->indexAction() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:516
+[01-Dec-2018 00:32:42 Europe/Paris] PHP Notice:  Undefined variable: result in D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php on line 126
+[01-Dec-2018 00:32:42 Europe/Paris] PHP Stack trace:
+[01-Dec-2018 00:32:43 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[01-Dec-2018 00:32:43 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[01-Dec-2018 00:32:43 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[01-Dec-2018 00:32:43 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[01-Dec-2018 00:32:43 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[01-Dec-2018 00:32:43 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[01-Dec-2018 00:32:43 Europe/Paris] PHP   7. Default_MonthlypayrollController->indexAction() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:516
+[01-Dec-2018 00:33:41 Europe/Paris] PHP Notice:  Undefined variable: result in D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php on line 126
+[01-Dec-2018 00:33:41 Europe/Paris] PHP Stack trace:
+[01-Dec-2018 00:33:41 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[01-Dec-2018 00:33:41 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[01-Dec-2018 00:33:41 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[01-Dec-2018 00:33:42 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[01-Dec-2018 00:33:42 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[01-Dec-2018 00:33:42 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[01-Dec-2018 00:33:42 Europe/Paris] PHP   7. Default_MonthlypayrollController->indexAction() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:516
+[01-Dec-2018 00:33:50 Europe/Paris] PHP Notice:  Undefined variable: result in D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php on line 126
+[01-Dec-2018 00:33:50 Europe/Paris] PHP Stack trace:
+[01-Dec-2018 00:33:50 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[01-Dec-2018 00:33:50 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[01-Dec-2018 00:33:51 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[01-Dec-2018 00:33:51 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[01-Dec-2018 00:33:51 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[01-Dec-2018 00:33:51 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[01-Dec-2018 00:33:51 Europe/Paris] PHP   7. Default_MonthlypayrollController->indexAction() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:516
+[01-Dec-2018 00:36:42 Europe/Paris] PHP Notice:  Undefined variable: result in D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php on line 126
+[01-Dec-2018 00:36:42 Europe/Paris] PHP Stack trace:
+[01-Dec-2018 00:36:42 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[01-Dec-2018 00:36:42 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[01-Dec-2018 00:36:42 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[01-Dec-2018 00:36:42 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[01-Dec-2018 00:36:42 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[01-Dec-2018 00:36:42 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[01-Dec-2018 00:36:42 Europe/Paris] PHP   7. Default_MonthlypayrollController->indexAction() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:516
+[01-Dec-2018 00:37:25 Europe/Paris] PHP Notice:  Undefined variable: result in D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php on line 126
+[01-Dec-2018 00:37:25 Europe/Paris] PHP Stack trace:
+[01-Dec-2018 00:37:25 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[01-Dec-2018 00:37:25 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[01-Dec-2018 00:37:25 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[01-Dec-2018 00:37:25 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[01-Dec-2018 00:37:25 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[01-Dec-2018 00:37:25 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[01-Dec-2018 00:37:25 Europe/Paris] PHP   7. Default_MonthlypayrollController->indexAction() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:516
+01.12.2018 at 02:05 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(270): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#3 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(270): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#4 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#5 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#8 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#9 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#10 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#11 {main}01.12.2018 at 02:05 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)01.12.2018 at 02:09 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#3 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#4 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#5 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#8 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#9 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#10 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#11 {main}01.12.2018 at 02:09 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)01.12.2018 at 02:09 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#3 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#4 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#5 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#8 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#9 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#10 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#11 {main}01.12.2018 at 02:09 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)01.12.2018 at 02:09 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id,r.e...', Array)
+#3 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id,r.e...')
+#4 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#5 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#8 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#9 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#10 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#11 {main}01.12.2018 at 02:09 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)01.12.2018 at 02:16 CRIT (2): <div class="page-not-404"><div class="div503"></div><p class="page-text">Application error</p><p class="sry-text">Sorry, but the page you are looking for has not been found. Try checking URL for errors, then hit the refresh button on your browser</p></div> exception 'PDOException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:228
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php(228): PDOStatement->execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#3 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id, r....', Array)
+#4 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id, r....')
+#5 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#8 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#9 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#10 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#11 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#12 {main}
+
+Next exception 'Zend_Db_Statement_Exception' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'hrm_db.main_employee_summary' doesn't exist' in D:\wamp\www\Sentrifugo\Zend\Db\Statement\Pdo.php:234
+Stack trace:
+#0 D:\wamp\www\Sentrifugo\Zend\Db\Statement.php(320): Zend_Db_Statement_Pdo->_execute(Array)
+#1 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Abstract.php(479): Zend_Db_Statement->execute(Array)
+#2 D:\wamp\www\Sentrifugo\Zend\Db\Adapter\Pdo\Abstract.php(238): Zend_Db_Adapter_Abstract->query('select r.id, r....', Array)
+#3 D:\wamp\www\Sentrifugo\application\modules\default\models\Monthlypayroll.php(271): Zend_Db_Adapter_Pdo_Abstract->query('select r.id, r....')
+#4 D:\wamp\www\Sentrifugo\application\modules\default\controllers\MonthlypayrollController.php(124): Default_Model_Monthlypayroll->CreateNewMonthlypayroll('1', NULL)
+#5 D:\wamp\www\Sentrifugo\Zend\Controller\Action.php(516): Default_MonthlypayrollController->indexAction()
+#6 D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php(295): Zend_Controller_Action->dispatch('indexAction')
+#7 D:\wamp\www\Sentrifugo\Zend\Controller\Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#8 D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#9 D:\wamp\www\Sentrifugo\Zend\Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#10 D:\wamp\www\Sentrifugo\index.php(110): Zend_Application->run()
+#11 {main}01.12.2018 at 02:16 CRIT (2): Request Parameters: array (
+  'controller' => 'monthlypayroll',
+  'action' => 'index',
+  'module' => 'default',
+)[02-Dec-2018 22:00:35 Europe/Paris] PHP Fatal error:  Call to a member function getElements() on a non-object in D:\wamp\www\Sentrifugo\application\modules\default\library\sapp\Global.php on line 1054
+[02-Dec-2018 22:00:35 Europe/Paris] PHP Stack trace:
+[02-Dec-2018 22:00:35 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[02-Dec-2018 22:00:35 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[02-Dec-2018 22:00:35 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[02-Dec-2018 22:00:35 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[02-Dec-2018 22:00:35 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[02-Dec-2018 22:00:36 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[02-Dec-2018 22:00:36 Europe/Paris] PHP   7. Zend_Controller_Action_HelperBroker->notifyPostDispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:527
+[02-Dec-2018 22:00:36 Europe/Paris] PHP   8. Zend_Controller_Action_Helper_ViewRenderer->postDispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Action\HelperBroker.php:277
+[02-Dec-2018 22:00:36 Europe/Paris] PHP   9. Zend_Controller_Action_Helper_ViewRenderer->render() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:960
+[02-Dec-2018 22:00:36 Europe/Paris] PHP  10. Zend_Controller_Action_Helper_ViewRenderer->renderScript() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:921
+[02-Dec-2018 22:00:36 Europe/Paris] PHP  11. Zend_View_Abstract->render() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:900
+[02-Dec-2018 22:00:36 Europe/Paris] PHP  12. Zend_View->_run() D:\wamp\www\Sentrifugo\Zend\View\Abstract.php:888
+[02-Dec-2018 22:00:37 Europe/Paris] PHP  13. include() D:\wamp\www\Sentrifugo\Zend\View.php:108
+[02-Dec-2018 22:00:37 Europe/Paris] PHP  14. sapp_Global::generateClientValidations() D:\wamp\www\Sentrifugo\application\modules\default\views\scripts\monthlypayroll\edit.phtml:28
+[02-Dec-2018 22:00:56 Europe/Paris] PHP Fatal error:  Call to a member function getElements() on a non-object in D:\wamp\www\Sentrifugo\application\modules\default\library\sapp\Global.php on line 1054
+[02-Dec-2018 22:00:56 Europe/Paris] PHP Stack trace:
+[02-Dec-2018 22:00:56 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[02-Dec-2018 22:00:56 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[02-Dec-2018 22:00:56 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[02-Dec-2018 22:00:57 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[02-Dec-2018 22:00:57 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[02-Dec-2018 22:00:57 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[02-Dec-2018 22:00:57 Europe/Paris] PHP   7. Zend_Controller_Action_HelperBroker->notifyPostDispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:527
+[02-Dec-2018 22:00:57 Europe/Paris] PHP   8. Zend_Controller_Action_Helper_ViewRenderer->postDispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Action\HelperBroker.php:277
+[02-Dec-2018 22:00:57 Europe/Paris] PHP   9. Zend_Controller_Action_Helper_ViewRenderer->render() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:960
+[02-Dec-2018 22:00:58 Europe/Paris] PHP  10. Zend_Controller_Action_Helper_ViewRenderer->renderScript() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:921
+[02-Dec-2018 22:00:58 Europe/Paris] PHP  11. Zend_View_Abstract->render() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:900
+[02-Dec-2018 22:00:58 Europe/Paris] PHP  12. Zend_View->_run() D:\wamp\www\Sentrifugo\Zend\View\Abstract.php:888
+[02-Dec-2018 22:00:58 Europe/Paris] PHP  13. include() D:\wamp\www\Sentrifugo\Zend\View.php:108
+[02-Dec-2018 22:00:58 Europe/Paris] PHP  14. sapp_Global::generateClientValidations() D:\wamp\www\Sentrifugo\application\modules\default\views\scripts\monthlypayroll\edit.phtml:28
+[02-Dec-2018 22:01:54 Europe/Paris] PHP Fatal error:  Call to a member function getElements() on a non-object in D:\wamp\www\Sentrifugo\application\modules\default\library\sapp\Global.php on line 1054
+[02-Dec-2018 22:01:54 Europe/Paris] PHP Stack trace:
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   1. {main}() D:\wamp\www\Sentrifugo\index.php:0
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   2. Zend_Application->run() D:\wamp\www\Sentrifugo\index.php:110
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   3. Zend_Application_Bootstrap_Bootstrap->run() D:\wamp\www\Sentrifugo\Zend\Application.php:366
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   4. Zend_Controller_Front->dispatch() D:\wamp\www\Sentrifugo\Zend\Application\Bootstrap\Bootstrap.php:97
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   5. Zend_Controller_Dispatcher_Standard->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Front.php:954
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   6. Zend_Controller_Action->dispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Dispatcher\Standard.php:295
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   7. Zend_Controller_Action_HelperBroker->notifyPostDispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Action.php:527
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   8. Zend_Controller_Action_Helper_ViewRenderer->postDispatch() D:\wamp\www\Sentrifugo\Zend\Controller\Action\HelperBroker.php:277
+[02-Dec-2018 22:01:54 Europe/Paris] PHP   9. Zend_Controller_Action_Helper_ViewRenderer->render() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:960
+[02-Dec-2018 22:01:54 Europe/Paris] PHP  10. Zend_Controller_Action_Helper_ViewRenderer->renderScript() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:921
+[02-Dec-2018 22:01:54 Europe/Paris] PHP  11. Zend_View_Abstract->render() D:\wamp\www\Sentrifugo\Zend\Controller\Action\Helper\ViewRenderer.php:900
+[02-Dec-2018 22:01:54 Europe/Paris] PHP  12. Zend_View->_run() D:\wamp\www\Sentrifugo\Zend\View\Abstract.php:888
+[02-Dec-2018 22:01:54 Europe/Paris] PHP  13. include() D:\wamp\www\Sentrifugo\Zend\View.php:108
+[02-Dec-2018 22:01:54 Europe/Paris] PHP  14. sapp_Global::generateClientValidations() D:\wamp\www\Sentrifugo\application\modules\default\views\scripts\monthlypayroll\edit.phtml:28

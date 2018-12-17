@@ -48,8 +48,26 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		$sortStr = $dataArray['by'];
 		$controllers_arr = $menu_model->getControllersByRole($role_id);
 		$menuName = '';
-		
-		if($dataArray['objectname'] == 'processes') $actionsobjname = 'empscreening';
+
+        // action button enabled or disabled for payroll module
+        $term = $dataArray['term'];
+        $action_status = true;
+        if($term){
+            $date_arr = explode('-', (string)$term);
+            $start_date_string = $date_arr[0].'-'.$date_arr[1].'-01';
+            $end_date_string = $date_arr[0].'-'.$date_arr[1].'-15';
+            $start_date = date("Y-m-d",strtotime($start_date_string));
+            $end_date = date("Y-m-d",strtotime($end_date_string));
+            $Date = new Zend_date();
+            $nowDate = $Date->get('YYYY-MM-dd');
+
+            if($nowDate < $start_date || $nowDate >$end_date){
+                $action_status = false;
+            }
+        }
+
+
+        if($dataArray['objectname'] == 'processes') $actionsobjname = 'empscreening';
 		else $actionsobjname = $dataArray['objectname'];
 		if(isset($controllers_arr[$actionsobjname."controller.php"]))
 		{
@@ -185,7 +203,13 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 						}	 	 
 						else   
                           $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-			
+
+						if(!$action_status){
+                            $view_str = '<a href= "#" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+                            $edit_str = '<a href= "#" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+                            $delete_str = '<a name="{{id}}"	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
+                        }
+
 						if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
 						{
 						  $extra['action'] =array(); 
@@ -318,6 +342,10 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		{
 		 $addpermission = "false";
 		}
+
+		if(!$action_status){
+		    $addpermission = "false";
+        }
 		if(isset($dataArray['unitId'])) $unitId = $dataArray['unitId'];
 
 		/** capture category id, for policy documents context **/
@@ -965,6 +993,13 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
 										}
 										break;
+                                    case 'Calc Payroll for Shift AMD':
+                                        if(is_numeric($p[$k])){
+                                            $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".number_format($p[$k])."</span>";
+                                        }else{
+                                            $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
+                                        }
+                                        break;
 									default:	 	                               
 	 	                                $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
 									    break;								 

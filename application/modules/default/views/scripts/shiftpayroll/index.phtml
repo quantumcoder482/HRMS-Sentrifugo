@@ -1,3 +1,170 @@
 <?php
-    echo $this->message;
+/*********************************************************************************
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
 ?>
+<div class="ml-alert-1-success" id="success" style="display:none">	<div class="style-1-icon success" id="message"></div></div>
+<?php
+$auth = Zend_Auth::getInstance();
+
+if (count($this->messages))
+{?>
+    <div id="dispscreeningtype" class="settingssuccess">
+        <?php
+        foreach ($this->messages as $message)
+        {
+            $flag = array();
+            $flag = array_keys($message);
+            echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+            echo $message[$flag[0]];
+            echo "</div></div>";
+        }
+        ?>
+    </div>
+
+<?php } ?>
+<div id="error_message"></div>
+<?php
+if($this->call != 'ajaxcall'){
+    ?>
+
+    <input type="hidden" id="term" value="<?php echo $this->term; ?>" />
+    <div id="error_message"></div>
+    <div>
+        <div class="sprite export-xls" <?php if($this->export_payroll != "disabled"){ ?> onclick="excelexport()" <?php }?> id="export_excel" >Export to Excel</div>
+        <button class="py-button" style="width: 30px; margin-right: 0px !important; margin-left: 10px" onclick="decrease_month()"> < </button>
+        <button class="py-button" style="width: 30px; margin-left: 0px !important;" onclick="increase_month()"> > </button>
+        <button class="py-button" style="width: 50px; margin-left: 5px" onclick="this_month()">today</button>
+        <span style="font-size: 15px; font-weight: 600; margin-left: 30px; " id="month_year"></span>
+    </div>
+    <br><br>
+    <?php
+}
+?>
+
+<?php
+
+if($this->call == 'ajaxcall'){
+    $div = ''; $endDiv = '';
+} else {
+    $div = '<div id="grid_'.$this->dataArray['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+//var_dump($this->dataArray);
+echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray).$endDiv;
+?>
+<div id="monthlypayrollContainer"  style="display: none; overflow: auto;">
+    <div class="heading">
+        <a href="javascript:void(0)">
+            <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+    </div>
+
+    <iframe id="monthlypayrollCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<script type="text/javascript" language="javascript">
+
+    $(document).ready(function(){
+
+        <?php $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
+        <?php if ($flashMessenger->setNamespace('success')->hasMessages()): ?>
+        <?php foreach ($flashMessenger->getMessages() as $msg): ?>
+        successmessage('<?php echo trim($msg); ?>');
+        <?php endforeach; ?>
+        <?php endif; ?>
+
+        var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+        var term = $('#term').val();
+        var term_arr = term.split('-');
+        var year = term_arr[0];
+        var month =Number(term_arr[1]);
+        var day = term_arr[2];
+
+        var month_year_string = months[month-1]+"   "+year;
+        $('#month_year').append(month_year_string);
+
+
+    });
+
+    function createpayroll(){
+        var term = $('#term').val();
+        window.location.href = base_url+'/shiftpayroll/index/newpayroll/'+term;
+    }
+    function excelexport(){
+        var term = $('#term').val();
+        window.location.href = base_url+'/shiftpayroll/getexcelexport/term/'+term;
+    }
+    function increase_month(){
+        var term = $('#term').val();
+        var term_arr = term.split('-');
+        var year = term_arr[0];
+        var month = Number(term_arr[1]);
+        var day = term_arr[2];
+
+        month = Number(month) + 1;
+        if(month>=13){
+            year = Number(year)+1;
+            month = 1;
+        }
+        // var date = new Date(year, month, day);
+        if(month<10){
+            var date = year + '-0' + month + '-' + day;
+        }
+        var date = year + '-' + month + '-' + day;
+
+        window.location.href = base_url+'/shiftpayroll/index/term/'+date;
+
+
+    }
+
+    function this_month(){
+        var date = new Date().toISOString().slice(0,10);
+        window.location.href = base_url+'/shiftpayroll/index/term/'+date;
+    }
+
+    function decrease_month(){
+        var term = $('#term').val();
+        var term_arr = term.split('-');
+        var year = term_arr[0];
+        var month = term_arr[1];
+        var day = term_arr[2];
+
+        month = Number(month) - 1;
+        if(month<=0){
+            year = Number(year) - 1;
+            month = 12;
+        }
+        // var date = new Date(year, month, day);
+        if(month<10){
+            var date = year + '-0' + month + '-' + day;
+        }
+        var date = year + '-' + month + '-' + day;
+        window.location.href = base_url+'/shiftpayroll/index/term/'+date;
+
+    }
+
+
+    function displaypayrolldata(id,controllername)
+    {
+        if(id)
+        {
+            window.location.href = base_url+'/'+controllername+'/index/con/'+id;
+        }
+    }
+
+</script>

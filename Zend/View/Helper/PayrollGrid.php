@@ -48,7 +48,23 @@ class Zend_View_Helper_PayrollGrid extends Zend_View_Helper_Abstract {
 		$sortStr = $dataArray['by'];
 		$controllers_arr = $menu_model->getControllersByRole($role_id);
 		$menuName = '';
-		
+		$term = $dataArray['term'];
+
+
+		// action button enabled or disabled
+        $date_arr = explode('-', (string)$term);
+        $start_date_string = $date_arr[0].'-'.$date_arr[1].'-01';
+        $end_date_string = $date_arr[0].'-'.$date_arr[1].'-15';
+        $start_date = date("Y-m-d",strtotime($start_date_string));
+        $end_date = date("Y-m-d",strtotime($end_date_string));
+        $Date = new Zend_date();
+        $nowDate = $Date->get('YYYY-MM-dd');
+        $action_status = true;
+        if($nowDate < $start_date || $nowDate >$end_date){
+            $action_status = false;
+        }
+
+
 		if($dataArray['objectname'] == 'processes') $actionsobjname = 'empscreening';
 		else $actionsobjname = $dataArray['objectname'];
 		if(isset($controllers_arr[$actionsobjname."controller.php"]))
@@ -97,7 +113,8 @@ class Zend_View_Helper_PayrollGrid extends Zend_View_Helper_Abstract {
 		$msgflag = constant($msgtitle);
 		$msgAr = explode(' ',$msgflag);
 		$msgdta = implode('@#$',$msgAr);
-		if(isset($dataArray['formgrid']) && $dataArray['formgrid'] == 'true') 
+
+		if(isset($dataArray['formgrid']) && $dataArray['formgrid'] == 'true')
 		{			
 			
 			if(isset($dataArray['unitId']))
@@ -165,138 +182,36 @@ class Zend_View_Helper_PayrollGrid extends Zend_View_Helper_Abstract {
 		else
 		{
 			$formgridVal = '';
-			            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-			            if($dataArray['objectname'] == 'appraisalconfig' || $dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'appraisalmanager' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements' || $dataArray['objectname'] == 'disciplinarymyincidents') 
-			            	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
-			            elseif($dataArray['objectname'] == 'manageremployeevacations'){
-			            	$edit_str = '<a name="{{id}}" onclick= displaydeptform(\''.BASE_URL.'leaverequest/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Approve or Reject or Cancel Leave\' class="fa fa-ellipsis-v" ></a>';
-			            }
-			            else {
-                        	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
-			            }
-			            
-						if($dataArray['objectname'] == 'pendingleaves')
-						   $delete_str = '<a id="cancel_leave_{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
-						else if($dataArray['objectname'] == 'usermanagement')
-							 $delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-						else if($dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements')
-						{
-							 $delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-						}	 	 
-						else   
-                          $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-			
-						if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
+
+			            if(!$action_status){
+                            $view_str = '<a href= "#" name="{{id}}" class="sprite view" title=\'View\'></a>';
+                            $payslip_str = '<a href= "#" name="{{id}}" class="sprite view" title=\'Payslip\'></a>';
+                            $edit_str = '<a href= "#" name="{{id}}" id="edit{{id}}" class="sprite edit"title=\'Edit\'></a>';
+                            $delete_str = '<a name="{{id}}"	href= javascript:void(0) title=\'Delete\' class="sprite delete"></a>';
+                        }else {
+                            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+                            $payslip_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/payslip/id/{{id}}" name="{{id}}" class="sprite view"  title=\'Payslip\'></a>';
+                            $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+                            $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
+                        }
+
+
+						if(!in_array('payslip',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
 						{
 						  $extra['action'] =array(); 
 						}else
 						{
 						  $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-										'.((in_array('view',$actions_arr)?$view_str:'')).'
+										'.((in_array('payslip',$actions_arr)?$payslip_str:'')).'
 										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
 									</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
 						}
-						if($dataArray['objectname'] == 'candidatedetails')
-						{
-							
-							$auth = Zend_Auth::getInstance();
-							if($auth->hasIdentity())
-							{
-								$loginUserId = $auth->getStorage()->read()->id;
-								$loginuserGroup = $auth->getStorage()->read()->group_id;
-								$loginuserRole = $auth->getStorage()->read()->emprole;
-							}
-							if($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP)
-							{
-								$schedule_str = '<a href= "'.BASE_URL.'scheduleinterviews'.'/add/cid/{{id}}" name="{{id}}" class="sprite schedule_interview" id="cv{{id}}" title=\'Schedule interview\'></a>';
-								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-											'.((in_array('view',$actions_arr)?$view_str:'')).'
-											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
-											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
-											  '.((in_array('schedule',$actions_arr)?'':$schedule_str)).'
-										</div>');
-							}
-							else{
-								
-								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-											'.((in_array('view',$actions_arr)?$view_str:'')).'
-											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
-											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
-										</div>');
-							}
-						}
+
+
 						//for exit types grid and all exit types grid
-						if($dataArray['objectname'] == 'exittypes' || $dataArray['objectname'] == 'configureexitqs')
-						{
-							$view_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-							$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
-							
-							$delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-							
-							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-											'.((in_array('view',$actions_arr)?$view_str:'')).'
-											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
-											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
-										</div>');
-						}
-						
-						if($dataArray['objectname'] == 'allexitproc' || $dataArray['objectname'] == 'exitproc')
-						{
-							$view_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-							
-							/*if($dataArray['objectname'] == 'exitproc')
-								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/questions/id/{{id}}" name="{{id}}" id="questions{{id}}" class="sprite assign_view_questions"  title=\'Edit\'></a>';
-							else
-								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite assign_view_questions"  title=\'Edit\'></a>';*/
-							
-							$auth = Zend_Auth::getInstance();
-							if($auth->hasIdentity())
-							{
-								$loginUserId = $auth->getStorage()->read()->id;
-								$loginuserGroup = $auth->getStorage()->read()->group_id;
-								$loginuserRole = $auth->getStorage()->read()->emprole;
-								$is_og_head = $auth->getStorage()->read()->is_orghead;
-							}
-							if($dataArray['objectname'] == 'exitproc')
-								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/questions/id/{{id}}" name="{{id}}" id="questions{{id}}" class="sprite assign_view_questions"  title=\'Answer and View Questions/Comments\'></a>';
-							elseif($loginuserRole != SUPERADMINROLE && $is_og_head!=1)
-								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
-							else
-								$edit_str='';	
-							
-							// assign questions icon only for hr, management and superadmin
-							if(($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP) && $dataArray['objectname'] == 'allexitproc'){
-								$assign_questions_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/assignquestions/id/{{id}}" name="{{id}}" class="sprite assign_view_questions"  id="assign_ques{{id}}"  title=\'Assign and View Questions/Comments\'></a>';
-								
-							}
-							else {
-								$assign_questions_str = '';
-							}
-							
-							// no delete action for all exit process
-							if($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP){
-								$delete_str = '<a name="{{id}}" id="overallupdate_{{id}}" onclick= displayexitform(\''.BASE_URL.'exit/allexitproc/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Update Overall Status\' class="fa fa-ellipsis-v" ></a>';
-							}else{
-								$delete_str = '';
-							}
 
-							
 
-							if($dataArray['objectname'] == 'exitproc')
-								$delete_str = '';
-							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-											'.((in_array('view',$actions_arr)?$view_str:'')).'
-											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
-											'.((in_array('assign',$actions_arr)?'':$assign_questions_str )).'
-											'.((in_array('update',$actions_arr)?'':$delete_str)).'
-											
-										</div>');
-						}
-						
-						
-						
-						
 		}
 		$extra['options'] = array(); 
         $addaction= '';  		
@@ -318,6 +233,7 @@ class Zend_View_Helper_PayrollGrid extends Zend_View_Helper_Abstract {
 		{
 		 $addpermission = "false";
 		}
+
 		if(isset($dataArray['unitId'])) $unitId = $dataArray['unitId'];
 
 		/** capture category id, for policy documents context **/
@@ -424,39 +340,14 @@ class Zend_View_Helper_PayrollGrid extends Zend_View_Helper_Abstract {
 				$output ="<div class='table-header'><span>".$this->pd_category_name."</span>";
 			else
 				$output ="<div class='table-header'><span>".$menuName."</span>";
-		  	if($name == 'candidatedetails'){
-		  		$output .= "<div class='add-multi-resume'><a href='".BASE_URL."candidatedetails/multipleresume'>Add multiple CVs</a></div>";
-		  	}
-			if($name == 'policydocuments')
-			{
-				$output .= "<a href='".BASE_URL.$name.'/'.$action."/cat/".$this->pd_category_id."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
-			}elseif($name=='disciplinaryincident') {
-				$output .= "<div class='add-btn-div'>";
-				$output .= "<input type='button' onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' title = 'Raise an Incident' value='Raise an Incident' class='sprite addrequest' />";
-				$output .= "</div>";
-			}
-			elseif($name == 'exittypes' || $name == 'configureexitqs')
-			{
-				$output .= "<a href='".BASE_URL.'exit'.'/'.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
-			}elseif($name == 'allexitproc')
-			{
-				$output .= "";
-			}else if($name=='exitproc'){
-				$auth = Zend_Auth::getInstance();
-				if($auth->hasIdentity())
-				{
-					$loginUserId = $auth->getStorage()->read()->id;
-					$loginuserGroup = $auth->getStorage()->read()->group_id;
-					$loginuserRole = $auth->getStorage()->read()->emprole;
-				}
-				if($loginuserRole == SUPERADMINROLE)
-					$output .= "";
-				else
-					$output .= "<a href='".BASE_URL.'exit'.'/'.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
-			}
-			else{
-		  		$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
-			}
+
+//		  		$output .= "<div class='add-multi-resume'><a href='".BASE_URL."/monthlypayroll/excelexport/'>Excel Export</a></div>";
+//				$output .= "<a href='".BASE_URL.$name.'/'.$action."/cat/".$this->pd_category_id."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
+//				$output .= "<div class='add-btn-div'>";
+//				$output .= "<input type='button' onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' title = 'Raise an Incident' value='Raise an Incident' class='sprite addrequest' />";
+//				$output .= "</div>";
+
+
 			$output .= "</div>";
 		} 
 		
@@ -965,9 +856,17 @@ class Zend_View_Helper_PayrollGrid extends Zend_View_Helper_Abstract {
 			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
 										}
 										break;
-									default:	 	                               
-	 	                                $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
-									    break;								 
+
+                                    case 'Monthly Payroll for AMD':
+                                        if(is_numeric($p[$k])){
+                                            $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".number_format($p[$k])."</span>";
+                                        }else{
+                                            $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
+                                        }
+                                        break;
+									default:
+                                        $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
+                                        break;
 								}											
 								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "ISO-8859-1")		
 							}							

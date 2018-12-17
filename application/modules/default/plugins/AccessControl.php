@@ -385,7 +385,7 @@ protected function _getAcl()
                     $acl->allow('admin', 'default:militaryservice', array('index','view','edit','delete'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:monthlypayroll'));
-                    $acl->allow('admin', 'default:monthlypayroll', array('index','add','edit','viewhr','approverequisition','addcandidate','interview','getdepartments','getpositions','viewpopup','view','delete','getapprreqdata','chkreqforclose','getempreportingmanagers','getemailcount','getapprovers','approverejectrequisition','addpopup'));
+                    $acl->allow('admin', 'default:monthlypayroll', array('index','add1','edit','payslip','getexcelexport','viewhr','getdepartments','getpositions','viewpopup','view','delete','getapprreqdata','chkreqforclose','getempreportingmanagers','getemailcount','getapprovers','approverejectrequisition','addpopup','upload','uploadview'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
                     $acl->allow('admin', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','experience','leaves','holidays','salarydetailsview','certification','creditcarddetailsview','creditcard','visadetailsview','visa','medicalclaims','disabilitydetailsview','disability','dependency','workeligibilitydetailsview','workeligibility','additionaldetailsedit','jobhistory','delete','documents','assetdetailsview'));
@@ -460,7 +460,7 @@ protected function _getAcl()
                     $acl->allow('admin', 'default:servicedeskrequest', array('index','add','view','edit','delete'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:shiftpayroll'));
-                    $acl->allow('admin', 'default:shiftpayroll', array('index'));
+                    $acl->allow('admin', 'default:shiftpayroll', array('index','add','edit','payslip','getexcelexport','view','delete','getemployeedata'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:shortlistedcandidates'));
                     $acl->allow('admin', 'default:shortlistedcandidates', array('index','edit','view','add','delete'));
@@ -547,7 +547,7 @@ protected function _getAcl()
                     $acl->allow('admin', 'default:empperformanceappraisal', array('index','edit','view'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:emppayslips'));
-                    $acl->allow('admin', 'default:emppayslips', array('index','edit','view'));
+                    $acl->allow('admin', 'default:emppayslips', array('index','edit','view','viewpopup'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empbenefits'));
                     $acl->allow('admin', 'default:empbenefits', array('index','edit','view'));
@@ -850,7 +850,7 @@ protected function _getAcl()
                             $acl->allow('management', 'default:militaryservice', array('index','add','edit','delete','view','Military Service Types'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:monthlypayroll'));
-                            $acl->allow('management', 'default:monthlypayroll', array('index','viewhr','approverequisition','addcandidate','interview','getdepartments','getpositions','viewpopup','getapprreqdata','chkreqforclose','getempreportingmanagers','getemailcount','getapprovers','approverejectrequisition','addpopup','add','edit','delete','view','Monthly Payroll for AMD'));
+                            $acl->allow('management', 'default:monthlypayroll', array('index','add1','payslip','getexcelexport','viewhr','getdepartments','getpositions','viewpopup','getapprreqdata','chkreqforclose','getempreportingmanagers','getemailcount','getapprovers','approverejectrequisition','addpopup','upload','uploadview','add','edit','delete','view','Monthly Payroll for AMD'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
                             $acl->allow('management', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','experience','leaves','holidays','salarydetailsview','certification','creditcarddetailsview','creditcard','visadetailsview','visa','medicalclaims','disabilitydetailsview','disability','dependency','workeligibilitydetailsview','workeligibility','additionaldetailsedit','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
@@ -934,7 +934,7 @@ protected function _getAcl()
 
                                 
 		 $acl->addResource(new Zend_Acl_Resource('default:shiftpayroll'));
-                            $acl->allow('management', 'default:shiftpayroll', array('index','add','edit','delete','view','Calc Payroll for Shift AMD'));
+                            $acl->allow('management', 'default:shiftpayroll', array('index','payslip','getexcelexport','getemployeedata','add','edit','delete','view','Calc Payroll for Shift AMD'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:shortlistedcandidates'));
                             $acl->allow('management', 'default:shortlistedcandidates', array('index','edit','view','Shortlisted & Selected Candidates'));
@@ -1012,7 +1012,7 @@ protected function _getAcl()
                             $acl->allow('management', 'default:empperformanceappraisal', array('index','view','index','edit','view'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:emppayslips'));
-                            $acl->allow('management', 'default:emppayslips', array('index','view','index','edit','view'));
+                            $acl->allow('management', 'default:emppayslips', array('index','view','index','edit','view','viewpopup'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empbenefits'));
                             $acl->allow('management', 'default:empbenefits', array('index','view','index','edit','view'));
@@ -1133,7 +1133,7 @@ protected function _getAcl()
                             $acl->allow('manager', 'default:candidatedetails', array('index','addpopup','chkcandidate','uploadfile','deleteresume','download','multipleresume','getvendors','viewpopup','view','Candidates'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:clients'));
-                            $acl->allow('manager', 'default:clients', array('index','addpopup','add','edit','delete','view','upload','uploadview','Clients'));
+                            $acl->allow('manager', 'default:clients', array('index','addpopup','add','edit','delete','view','Clients'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:dashboard'));
                         $acl->allow('manager', 'default:dashboard', array('index','saveuserdashboard','getwidgtes','upgradeapplication','emailsettings','changepassword','editpassword','update','uploadpreview','viewprofile','viewsettings','savemenuwidgets','getmenuname','fetchmenuname','getnavids','getopeningpositondate','menuwork','employeeimageupdate'));
@@ -1171,6 +1171,9 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('manager', 'default:manageremployeevacations', array('index','edit','view','Employee Leave'));
 
+		 $acl->addResource(new Zend_Acl_Resource('default:monthlypayroll'));
+                            $acl->allow('manager', 'default:monthlypayroll', array('index','add1','payslip','getexcelexport','viewhr','getdepartments','getpositions','viewpopup','getapprreqdata','chkreqforclose','getempreportingmanagers','getemailcount','getapprovers','approverejectrequisition','addpopup','upload','uploadview','add','edit','delete','view','Monthly Payroll for AMD'));
+
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
                             $acl->allow('manager', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','experience','leaves','holidays','salarydetailsview','certification','creditcarddetailsview','creditcard','visadetailsview','visa','medicalclaims','disabilitydetailsview','disability','dependency','workeligibilitydetailsview','workeligibility','additionaldetailsedit','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
 
@@ -1193,7 +1196,7 @@ protected function _getAcl()
                             $acl->allow('manager', 'default:policydocuments', array('index','uploaddoc','deletedocument','addmultiple','uploadmultipledocs','view','View/Manage Policy Documents'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:projects'));
-                            $acl->allow('manager', 'default:projects', array('index','viewpopup','editpopup','add','edit','delete','view','upload','uploadview','Projects'));
+                            $acl->allow('manager', 'default:projects', array('index','viewpopup','editpopup','add','edit','delete','view','Projects'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:rejectedrequisitions'));
                             $acl->allow('manager', 'default:rejectedrequisitions', array('index','view','Rejected Requisitions'));
@@ -1213,6 +1216,9 @@ protected function _getAcl()
                                     $acl->allow('manager','default:servicerequests', array('index','uploadsave','uploaddelete','view','getrequests','changestatus','checkrequeststatus','getuserassets','index','add','uploadsave','uploaddelete','view','getrequests','changestatus','checkrequeststatus','getuserassets'));
 
                                 
+		 $acl->addResource(new Zend_Acl_Resource('default:shiftpayroll'));
+                            $acl->allow('manager', 'default:shiftpayroll', array('index','payslip','getexcelexport','getemployeedata','add','edit','delete','view','Calc Payroll for Shift AMD'));
+
 		 $acl->addResource(new Zend_Acl_Resource('default:shortlistedcandidates'));
                             $acl->allow('manager', 'default:shortlistedcandidates', array('index','view','Shortlisted & Selected Candidates'));
 
@@ -1238,10 +1244,10 @@ protected function _getAcl()
                             $acl->allow('manager', 'expenses:trips', array('index','addpopup','tripstatus','deleteexpense','downloadtrippdf','add','edit','delete','view','Trips'));
 
 		 $acl->addResource(new Zend_Acl_Resource('exit:allexitproc'));
-                            $acl->allow('manager', 'exit:allexitproc', array('index','editpopup','updateexitprocess','assignquestions','add','edit','view','upload','uploadview','All Exit Procedures'));
+                            $acl->allow('manager', 'exit:allexitproc', array('index','editpopup','updateexitprocess','assignquestions','add','edit','view','All Exit Procedures'));
 
 		 $acl->addResource(new Zend_Acl_Resource('exit:exitproc'));
-                            $acl->allow('manager', 'exit:exitproc', array('index','questions','savequestions','add','edit','view','upload','uploadview','Initiate/Check Status'));
+                            $acl->allow('manager', 'exit:exitproc', array('index','questions','savequestions','add','edit','view','Initiate/Check Status'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:emppersonaldetails'));
                             $acl->allow('manager', 'default:emppersonaldetails', array('index','view'));
@@ -1587,7 +1593,7 @@ protected function _getAcl()
                             $acl->allow('hrmanager', 'default:empperformanceappraisal', array('index','view','index','edit','view'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:emppayslips'));
-                            $acl->allow('hrmanager', 'default:emppayslips', array('index','view','index','edit','view'));
+                            $acl->allow('hrmanager', 'default:emppayslips', array('index','view','index','edit','view','viewpopup'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empbenefits'));
                             $acl->allow('hrmanager', 'default:empbenefits', array('index','view','index','edit','view'));
